@@ -1,0 +1,4 @@
+rootProject.name = 'smartstart'
+
+include 'core'
+include 'app'
