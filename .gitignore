@@ -34,6 +34,7 @@
 **/*.iml
 **/*.ipr
 **/.idea
+**/out
 
 # .DS_Store mac file
 **/.DS_Store
