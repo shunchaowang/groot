@@ -1,0 +1,4 @@
+rootProject.name = 'smartboot'
+
+include 'core'
+include 'app'
