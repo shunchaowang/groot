@@ -43,7 +43,5 @@
 
 # ignore all application-*.properties under all resources folder
 **/resources/application-*.properties
-# ignore all spring.properties under all resources folder
-**/resources/spring.properties
 
 **/.gradle
