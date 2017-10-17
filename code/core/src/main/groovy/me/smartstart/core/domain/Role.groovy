@@ -1,9 +1,13 @@
 package me.smartstart.core.domain
 
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
 
 @Entity
 class Role {
@@ -11,18 +15,23 @@ class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id
+
+    @Column(nullable = false, unique = true, length = 64)
     String name
+
+    @Column
     String description
+
+    @Column(nullable = false)
     boolean active
 
-    static constraints = {
-        name nullable: false, blank: false, size: 4..64, unique: true
-        description nullable: true, blank: false
-        active nullable: false
-    }
+    @ManyToMany
+    @JoinTable(name = 'role_permission_mapping',
+            joinColumns = @JoinColumn(name = 'role_id'),
+            inverseJoinColumns = @JoinColumn(name = 'permission_id')
+    )
+    Set<Permission> permissions
 
-    // bidirectional relation with Permission and User
-    static hasMany = [permissions: Permission, users: User]
-
-    static belongsTo = User
+    @ManyToMany
+    Set<User> user
 }

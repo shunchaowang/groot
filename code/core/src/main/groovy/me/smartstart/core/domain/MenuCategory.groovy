@@ -1,9 +1,11 @@
 package me.smartstart.core.domain
 
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.OneToMany
 
 @Entity
 class MenuCategory {
@@ -11,13 +13,13 @@ class MenuCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id
+
+    @Column(nullable = false, length = 64)
     String name
 
-    static hasMany = [menuItems: MenuItem]
+    @Column(nullable = false)
+    long index
 
-    // mappedBy can make menuItems to be mapped by the attribute from MenuItem if needed
-
-    static constraints = {
-        name nullable: false, blank: false, size: 4..64, unique: true
-    }
+    @OneToMany(mappedBy = 'menuCategory')
+    Set<MenuItem> menuItems
 }
