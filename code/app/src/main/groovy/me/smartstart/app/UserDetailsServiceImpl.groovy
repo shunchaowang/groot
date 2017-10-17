@@ -35,7 +35,7 @@ class UserDetailsServiceImpl implements UserDetailsService {
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         logger.debug "username is ${username}"
-        User user = userService.findByUsername(username)
+        User user = userService.findUserByUsername(username)
         new UserDetailsImpl(user)
     }
 }

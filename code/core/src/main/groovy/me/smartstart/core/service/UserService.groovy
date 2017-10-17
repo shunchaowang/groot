@@ -1,8 +1,11 @@
 package me.smartstart.core.service
 
+import me.smartstart.core.domain.Permission
 import me.smartstart.core.domain.User
 
-interface UserService {
+interface UserService extends GenericService<User, Long> {
 
-    User findByUsername(String username)
+    User findUserByUsername(String username)
+
+    Permission findPermissionByName(String name)
 }
