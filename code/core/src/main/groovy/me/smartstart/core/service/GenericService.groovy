@@ -1,5 +1,9 @@
 package me.smartstart.core.service
 
+import org.springframework.data.domain.Page
+
+import java.awt.print.Pageable
+
 interface GenericService<T, ID> {
 
     T create(T t)
@@ -13,4 +17,6 @@ interface GenericService<T, ID> {
     Long countAll()
 
     List<T> getAll()
+
+    Page<T> findAll(Pageable pageable)
 }
