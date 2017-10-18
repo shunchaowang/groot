@@ -8,35 +8,44 @@ import org.springframework.security.core.userdetails.UserDetails
 /**
  * The SecurityUser implements spring security UserDetails to support authentication.
  */
-class UserDetailsImpl extends User implements UserDetails {
+class UserDetailsImpl implements UserDetails {
+
+    static final long serialVersionUID = 1L
+
+    User user
 
     UserDetailsImpl(User user) {
-        this.with {
-            id = user?.id
-            username = user?.username
-            password = user?.password
-            firstName = user?.password
-            lastName = user?.password
-            active = user?.active
-
-            roles = user?.roles
-            permissions = user?.permissions
-
-            roles.each {
-                permissions.addAll(it.permissions)
-            }
-        }
+        this.user = user
+    }
+/**
+ * Returns the password used to authenticate the user.
+ *
+ * @return the password
+ */
+    @Override
+    String getPassword() {
+        return user.password
     }
 
     /**
-     * Returns the authorities granted to the user. Cannot return <code>null</code>.
+     * Returns the username used to authenticate the user. Cannot return <code>null</code>
+     * .
      *
-     * @return the authorities, sorted by natural key (never <code>null</code>)
+     * @return the username (never <code>null</code>)
      */
     @Override
+    String getUsername() {
+        return user.username
+    }
+/**
+ * Returns the authorities granted to the user. Cannot return <code>null</code>.
+ *
+ * @return the authorities, sorted by natural key (never <code>null</code>)
+ */
+    @Override
     Collection<? extends GrantedAuthority> getAuthorities() {
-        HashSet<GrantedAuthority> authorities
-        this.roles.each {
+        HashSet<GrantedAuthority> authorities = new HashSet<>()
+        user.roles.each {
             SimpleGrantedAuthority authority = new SimpleGrantedAuthority(it.name)
             authorities.add(authority)
         }
@@ -86,6 +95,6 @@ class UserDetailsImpl extends User implements UserDetails {
      */
     @Override
     boolean isEnabled() {
-        return this.active
+        return user.active
     }
 }

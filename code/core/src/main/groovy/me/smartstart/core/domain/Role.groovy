@@ -2,6 +2,7 @@ package me.smartstart.core.domain
 
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -25,7 +26,7 @@ class Role {
     @Column(nullable = false)
     boolean active
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = 'role_permission_mapping',
             joinColumns = @JoinColumn(name = 'role_id'),
             inverseJoinColumns = @JoinColumn(name = 'permission_id')

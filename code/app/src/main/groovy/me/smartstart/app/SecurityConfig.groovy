@@ -96,17 +96,17 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // ROLEs must not have ROLE prefix
         http
-                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/login/form**", "/register", "/logout").permitAll() // #1
-        //.antMatchers("/", "/**").hasRole("ADMIN") // #2
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login/form")
-                .loginProcessingUrl("/login")
-                .failureUrl("/login/form?error")
-                .permitAll() // #3
+                .loginPage("/login.html")
+                .failureUrl("/login-error.html")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/index.html")
+                .permitAll()
                 .and()
                 .exceptionHandling().accessDeniedPage("/403") // #4 denied, mapped in Controller
     }

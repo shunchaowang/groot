@@ -1,14 +1,12 @@
 package me.smartstart.app
 
 import me.smartstart.core.domain.Permission
-import me.smartstart.core.domain.User
 import me.smartstart.core.service.UserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.PermissionEvaluator
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 
 @Component
@@ -36,11 +34,9 @@ class PermissionEvaluatorImpl implements PermissionEvaluator {
         Permission permissionObj = userService.findPermissionByName(permission as String)
         if (!permissionObj) return false
 
-        UserDetails userDetails = authentication.principal as UserDetails
-        if (!userDetails) return false
-        User user = userService.findUserByUsername(userDetails.username)
-        logger.debug("Evaluate permission for user ${user.username}")
-        return new UserDetailsImpl(user)?.permissions?.contains(permissionObj)
+        UserDetailsImpl userDetails = authentication.principal as UserDetailsImpl
+        logger.debug("Evaluate permission for user ${userDetails.username}")
+        return userDetails?.user?.permissions?.contains(permissionObj)
     }
 
     /**

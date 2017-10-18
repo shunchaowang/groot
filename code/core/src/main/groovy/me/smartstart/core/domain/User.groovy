@@ -2,6 +2,7 @@ package me.smartstart.core.domain
 
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -32,7 +33,7 @@ class User {
     String lastName
 
     @Lob
-    byte[] profilePicture
+    byte[] profileImage
 
     @Column
     String description
@@ -48,14 +49,14 @@ class User {
     @Column(nullable = false)
     boolean active
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = 'user_role_mapping',
             joinColumns = @JoinColumn(name = 'user_id'),
             inverseJoinColumns = @JoinColumn(name = 'role_id')
     )
     Set<Role> roles
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = 'user_permission_mapping',
             joinColumns = @JoinColumn(name = 'user_id'),
             inverseJoinColumns = @JoinColumn(name = 'permission_id')

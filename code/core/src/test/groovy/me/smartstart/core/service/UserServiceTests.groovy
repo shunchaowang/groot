@@ -1,32 +1,69 @@
 package me.smartstart.core.service
 
 import me.smartstart.core.domain.User
+import me.smartstart.core.repository.PermissionRepository
+import me.smartstart.core.repository.RoleRepository
 import me.smartstart.core.repository.UserRepository
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 
 import static org.assertj.core.api.Assertions.assertThat
 
-@DataJpaTest
 @RunWith(SpringRunner)
+@ContextConfiguration
 class UserServiceTests {
+
+    @Configuration
+    static class UserServiceTestContextConfiguration {
+
+        @Bean
+        UserService userService() {
+            new UserServiceImpl()
+        }
+
+        @Bean
+        UserRepository userRepository() {
+            Mockito.mock(UserRepository)
+        }
+
+        @Bean
+        RoleRepository roleRepository() {
+            Mockito.mock(RoleRepository)
+        }
+
+        @Bean
+        PermissionRepository permissionRepository() {
+            Mockito.mock(PermissionRepository)
+        }
+    }
+
+    @Autowired
+    UserService userService
 
     @Autowired
     UserRepository userRepository
 
-    @Test
-    void whenFindByUsername_thenReturnUser() {
-
-        // given
+    @Before
+    void setup() {
         def user = new User(username: 'john', password: 'john password',
                 firstName: 'john', lastName: 'tom', dateCreated: new Date())
-        userRepository.save(user)
+        Mockito.when(userRepository.findByUsername('john')).thenReturn(user)
+    }
 
+
+    @Test
+    void 'test find user by username'() {
+
+        // given
         // when
-        def found = userRepository.findByUsername('john')
+        def found = userService.findUserByUsername('john')
 
         // then
         assertThat found.firstName == 'john'
