@@ -24,7 +24,7 @@ class UserRepositoryTests {
     UserRepository repository
 
     @Test
-    void testFindByUsername() {
+    void whenFindByUsername_thenReturnUser() {
 
         // given
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
