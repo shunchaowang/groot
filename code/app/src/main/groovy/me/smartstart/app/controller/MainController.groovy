@@ -15,18 +15,18 @@ class MainController {
     @Autowired
     UserService userService
 
-    @RequestMapping('/home')
-    @ResponseBody
-    String home() {
-        '*** Hello Home ***'
+    @RequestMapping('/hello')
+    //@ResponseBody
+    String hello() {
+        return 'hello/hello'
     }
 
     @PreAuthorize("isAuthenticated() and hasAuthority('ROLE_ADMIN')")
     @RequestMapping('/')
-    String hello() {
+    String home() {
         def userCount = userService.countAllUser()
         println("uuuuser service: ${userCount}")
-        return 'hello/hello'
+        return 'home'
     }
 
     // login form

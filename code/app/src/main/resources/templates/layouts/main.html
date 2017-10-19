@@ -9,22 +9,24 @@
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap-theme.min.css"/>
 </head>
+
 <body>
 
-<div th:replace="fragments/header :: header"/>
+<div th:replace="layouts/fragments/header :: header"/>
 
 <div class="container">
     <div layout:fragment="content">
         Page content goes here
     </div>
 </div>
-</div>
 
 <div class="navbar navbar-default navbar-fixed-bottom">
-    <div th:replace="fragments/footer :: footer"/>
+    <div th:replace="layouts/fragments/footer :: footer"/>
 </div>
+
 <script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
 <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <th:block layout:fragment="scripts"></th:block>
 </body>
 </html>
