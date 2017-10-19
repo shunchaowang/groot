@@ -16,7 +16,8 @@ class MvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     LocaleResolver sessionLocaleResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver()
-        localeResolver.defaultLocale = new Locale("zh", "cn")
+//        localeResolver.defaultLocale = new Locale("zh", "cn")
+        localeResolver.defaultLocale = Locale.CHINA
         return localeResolver
     }
 
