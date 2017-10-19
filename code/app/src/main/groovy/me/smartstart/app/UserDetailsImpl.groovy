@@ -1,6 +1,11 @@
 package me.smartstart.app
 
+import me.smartstart.core.domain.MenuCategory
+import me.smartstart.core.domain.MenuItem
+import me.smartstart.core.domain.Permission
 import me.smartstart.core.domain.User
+import me.smartstart.navigation.Menu
+import me.smartstart.navigation.SubMenu
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -12,10 +17,51 @@ class UserDetailsImpl implements UserDetails {
 
     static final long serialVersionUID = 1L
 
-    User user
+    private User user
+
+    HashSet<Permission> permissions
+
+    List<Menu> menus
 
     UserDetailsImpl(User user) {
         this.user = user
+
+        permissions = new HashSet<>()
+        permissions.addAll(user.permissions)
+
+        user.roles.each {
+            permissions.addAll(it.permissions)
+        }
+
+        // get all menu items and categories from the user and map them to Navigation menu, they have
+        // to be sorted to make sure they stay the same order every time
+        HashMap<String, Menu> menuMap = new HashMap<>()
+
+        permissions.each {
+
+            MenuItem menuItem = it.menuItem
+            if (!menuItem) return
+            MenuCategory menuCategory = menuItem.menuCategory
+            if (!menuCategory) return
+
+            if (!menuMap.containsKey(menuCategory.name)) {
+                // add a new key entry
+                menuMap.put(menuCategory.name, new Menu(menuCategory))
+            }
+
+            SubMenu subMenu = new SubMenu(menuItem)
+            if (menuMap.get(menuCategory.name).subMenus.contains(subMenu)) {
+                return
+            }
+            menuMap.get(menuCategory.name).subMenus.add(subMenu)
+        }
+
+        menus = new ArrayList<>(menuMap.values())
+        menus.each {
+            Collections.sort(it.subMenus)
+        }
+
+        menus
     }
 /**
  * Returns the password used to authenticate the user.
