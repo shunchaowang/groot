@@ -21,7 +21,7 @@ class MainController {
         '*** Hello Home ***'
     }
 
-    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated() and hasAuthority('ROLE_ADMIN')")
     @RequestMapping('/')
     String hello() {
         def userCount = userService.countAllUser()
@@ -30,13 +30,13 @@ class MainController {
     }
 
     // login form
-    @RequestMapping(value = '/login.html', method = RequestMethod.GET)
+    @RequestMapping(value = '/login', method = RequestMethod.GET)
     String login() {
         return 'login'
     }
 
     // login form with error
-    @RequestMapping(value = '/login-error.html', method = RequestMethod.GET)
+    @RequestMapping(value = '/login-error', method = RequestMethod.GET)
     String loginError(Model model) {
         model.addAttribute('loginError', true)
         return 'login'
