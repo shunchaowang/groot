@@ -18,7 +18,7 @@ class MenuCategory {
     String name
 
     @Column(nullable = false)
-    long index
+    int index
 
     @OneToMany(mappedBy = 'menuCategory')
     Set<MenuItem> menuItems

@@ -22,7 +22,7 @@ class MenuItem {
     String target
 
     @Column(nullable = false)
-    long index
+    int index
 
     // unidirectional relation to MenuCategory
     @ManyToOne
