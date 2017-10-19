@@ -36,7 +36,7 @@ class PermissionEvaluatorImpl implements PermissionEvaluator {
 
         UserDetailsImpl userDetails = authentication.principal as UserDetailsImpl
         logger.debug("Evaluate permission for user ${userDetails.username}")
-        return userDetails?.user?.permissions?.contains(permissionObj)
+        return userDetails?.permissions?.contains(permissionObj)
     }
 
     /**
