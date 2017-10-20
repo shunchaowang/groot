@@ -8,12 +8,18 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.servlet.LocaleResolver
+
+import javax.servlet.http.HttpServletRequest
 
 @Controller
 class MainController {
 
     @Autowired
     UserService userService
+
+    @Autowired
+    LocaleResolver localeResolver
 
     @RequestMapping('/hello')
     //@ResponseBody
@@ -23,7 +29,9 @@ class MainController {
 
     @PreAuthorize("isAuthenticated() and hasAuthority('ROLE_ADMIN')")
     @RequestMapping('/')
-    String home() {
+    String home(HttpServletRequest request) {
+        Locale locale = localeResolver.resolveLocale(request)
+        println "current locale: ${locale.displayLanguage}"
         def userCount = userService.countAllUser()
         println("uuuuser service: ${userCount}")
         return 'home'
