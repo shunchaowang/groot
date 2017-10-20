@@ -27,11 +27,10 @@ class MainController {
         return 'hello/hello'
     }
 
-    @PreAuthorize("isAuthenticated() and hasAuthority('ROLE_ADMIN')")
+    //@PreAuthorize("isAuthenticated() and hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping('/')
-    String home(HttpServletRequest request) {
-        Locale locale = localeResolver.resolveLocale(request)
-        println "current locale: ${locale.displayLanguage}"
+    String home() {
         def userCount = userService.countAllUser()
         println("uuuuser service: ${userCount}")
         return 'home'
