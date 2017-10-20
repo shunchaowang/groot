@@ -23,6 +23,10 @@ class UserDetailsImpl implements UserDetails {
 
     List<Menu> menus
 
+    List<Menu> getMenus() {
+        return menus
+    }
+
     UserDetailsImpl(User user) {
         this.user = user
 
@@ -60,8 +64,6 @@ class UserDetailsImpl implements UserDetails {
         menus.each {
             Collections.sort(it.subMenus)
         }
-
-        menus
     }
 /**
  * Returns the password used to authenticate the user.

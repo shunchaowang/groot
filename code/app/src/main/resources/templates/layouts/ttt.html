@@ -1,59 +1,20 @@
-<!-- use this if going with permission based authorization -->
-<div th:with="menus=#{authentication.principal.menus}" th:remove="tag">
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="navbar-collapse">
-        <!-- ul added here -->
-        <ul class="nav navbar-nav">
-                        <span th:each="menu: ${menus}" th:remove="tag">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-expanded="false">
-                                    <span th:text="#{menu.${menu.name}.label}" th:remove="tag"></span>
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">
+        <!--<span th:text="#{menu.${menu.name}.label}" th:remove="tag"></span>-->
+        <span th:text="${menu.name}">Menu</span>
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
                                     <span th:each="subMenu: ${menu.subMenus}" th:remove="tag">
                                         <li>
-                                             <a href="#" th:href="@{/subMenu.target}">
-                                                 <span th:text="#{subMenu.${subMenu.name}.label}" th:remove="tag">
-                                                 </span>
+                                             <a href="#" th:href="${subMenu.target}">
+                                                 <!--<span th:text="#{subMenu.${subMenu.name}.label}"
+                                                 th:remove="tag"></span>-->
+                                                 <span th:text="${subMenu.name}">Submenu</span>
+
                                             </a>
                                         </li>
                                     </span>
-                                </ul> <!-- end of dropdown-menu -->
-                            </li> <!-- end of dropdown -->
-                        </span> <! -- end of th:each -->
-        </ul> <!-- end of navbar-nav -->
-
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle" role="button" data-toggle="dropdown"
-                   data-target="#" href="#">
-                    <!-- TODO: Only show menu items based on permissions (e.g., Guest has no account page) -->
-                    <i class="icon icon-user"></i>
-                    <span sec:authentication="name">User</span>
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a href="#" th:href="@{/logout}">
-                            <i class="icon icon-off"></i>
-                            <span th:text="#{user.logout.label}">Logout</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" th:href="@{/home/password}">
-                            <span th:text="#{user.change.password.label}">Change Password</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="${rootURL}home/profile">
-                            <span th:text="#{user.profile.label}">Profile</span>
-                        </a>
-                    </li>
-                </ul> <!-- end of dropdown menu -->
-            </li> <!-- end of li dropdown -->
-        </ul> <!-- end of navbar-right -->
-    </div>
-    <!-- end of navbar-collapse -->
-</div> <!-- end of th:with -->
+    </ul> <!-- end of dropdown-menu -->
+</li> <!-- end of dropdown -->

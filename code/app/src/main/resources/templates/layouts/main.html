@@ -9,13 +9,15 @@
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap-theme.min.css"/>
 </head>
 
-<body>
+<body class="container-fluid">
 
 <div th:replace="layouts/fragments/header :: navbar"/>
 
-<div class="container">
-    <div layout:fragment="content">
-        Page content goes here
+<div class="row">
+    <div class="col-sm-12">
+        <div layout:fragment="content">
+            Page content goes here
+        </div>
     </div>
 </div>
 

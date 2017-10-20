@@ -9,6 +9,10 @@ class Menu implements Comparable<Menu> {
 
     List<SubMenu> subMenus
 
+    String getName() {
+        return name
+    }
+
     Menu(MenuCategory menuCategory) {
         name = menuCategory.name
         index = menuCategory.index

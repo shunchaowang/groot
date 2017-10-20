@@ -45,6 +45,59 @@
 
                 <!-- th:with added here -->
 
+                <!-- use this if going with permission based authorization -->
+<div th:with="menus=${#authentication.principal.menus}" th:remove="tag">
+    <span th:text="${#lists.size(menus)}">Length</span>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar-collapse">
+        <!-- ul added here -->
+        <ul class="nav navbar-nav">
+                        <!-- span addes here -->
+
+            <span th:each="menu: ${menus}" th:remove="tag">
+                <span th:text="#{menu.__${menu.name}__.label}">Name</span>
+                            <!-- lis added here -->
+                        </span> <!-- end of th:each -->
+
+
+        </ul> <!-- end of navbar-nav -->
+
+
+
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <div class="dropdown">
+                <a class="dropdown-toggle" role="button" id="dropdownMenuUser"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span sec:authentication="name">User</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuUser">
+                    <li>
+                     <form th:action="@{/logout}" method="post">
+                        <input type="submit" value="Sign Out" class="btn btn-link" th:value="#{user.logout.label}"/>
+                     </form>
+            </li>
+            <li>
+                <a href="#" th:href="@{/home/password}">
+                    <span th:text="#{user.change.password.label}">Change Password</span>
+                </a>
+            </li>
+            <li>
+                <a href="@{/home/profile}">
+                    <span th:text="#{user.profile.label}">Profile</span>
+                </a>
+            </li>
+                </ul>
+            </div>
+
+
+
+        </ul> <!-- end of navbar-right -->
+    </div>
+    <!-- end of navbar-collapse -->
+</div> <!-- end of th:with -->
 
 
 

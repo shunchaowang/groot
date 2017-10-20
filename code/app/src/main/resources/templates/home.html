@@ -8,10 +8,20 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>Hello world</h1>
+    <div class="container-fluid">
+        <h1>Hello world</h1>
+
+        <table>
+            <tr th:each="var : ${#vars}">
+                <td th:text="${var.key}"></td>
+                <td th:text="${var.value}"></td>
+            </tr>
+        </table>
+
+    </div>
 </div>
-</body>
 <th:block layout:fragment="scripts">
     <script src="/js/hello/hello.js"></script>
 </th:block>
+</body>
 </html>
