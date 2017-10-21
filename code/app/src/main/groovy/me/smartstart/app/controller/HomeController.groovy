@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.LocaleResolver
+import org.springframework.web.servlet.ModelAndView
 
 import javax.servlet.http.HttpServletRequest
 import java.security.Principal
@@ -32,8 +33,7 @@ class HomeController {
     }
 
     //@PreAuthorize("isAuthenticated() and hasAuthority('ROLE_ADMIN')")
-    @PreAuthorize("isAuthenticated()")
-    @RequestMapping('/')
+    @RequestMapping(['/home', '/index'])
     String home() {
         def userCount = userService.countAllUser()
         println("uuuuser service: ${userCount}")
@@ -54,10 +54,12 @@ class HomeController {
      * @param principal
      * @return
      */
-    @GetMapping('/profile')
-    String profile(Principal principal) {
+    @GetMapping('/home/profile')
+    String profile(Principal principal, Model model) {
         String username = principal.name
-        User = userService.findUserByUsername(username)
+        User user = userService.findUserByUsername(username)
+        model.addAttribute('userCommand', new UserCommand(user))
+        return 'profile'
     }
 
     @GetMapping('/403')
