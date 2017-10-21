@@ -1,20 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org">
 <head></head>
 <body>
-<div th:fragment="footer">
-    <div id="footer" class="col-sm-12">
-        <h1 th:text="#{application.copyright.text}">Copy </h1>
-        <span sec:authorize="isAuthenticated()">
-                | Logged user: <span sec:authentication="name"></span> |
-                Roles: <span sec:authentication="principal.authorities"></span> |
-            <!-- with csrf enabled on http, cannot log out with get -->
-            <!-- <a th:href="@{/logout}">Sign Out Get</a> -->
-            <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
-            </span>
+<div class="row" th:fragment="footer">
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <h4 th:text="#{application.copyright.text}">Copy Right</h4>
     </div>
 </div>
 </body>

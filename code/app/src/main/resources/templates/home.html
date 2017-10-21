@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layouts/main">
 <head>
@@ -8,16 +9,12 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container-fluid">
-        <h1>Hello world</h1>
-
-        <table>
-            <tr th:each="var : ${#vars}">
-                <td th:text="${var.key}"></td>
-                <td th:text="${var.value}"></td>
-            </tr>
-        </table>
-
+    <div class="row">
+    <h1>Only administrator can see role below.</h1>
+        <!-- use this if going with role based authorization -->
+        <span sec:authorize="hasAuthority('ROLE_ADMIN')">
+            <span sec:authentication="principal.authorities">principal</span>
+        </span>
     </div>
 </div>
 <th:block layout:fragment="scripts">

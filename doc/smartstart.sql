@@ -222,7 +222,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `smartstart`;
-INSERT INTO `smartstart`.`menu_item` (`id`, `name`, `index`, `target`, `menu_category_id`) VALUES (1, 'manageUser', 11, 'user/indexAll', 1);
+INSERT INTO `smartstart`.`menu_item` (`id`, `name`, `index`, `target`, `menu_category_id`) VALUES (1, 'manageUser', 11, 'user/index', 1);
 
 COMMIT;
 
