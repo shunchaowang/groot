@@ -21,20 +21,18 @@
     </div>
     <div class="row">
         <div class="col-sm-8">
-            <form action="home/profile" method="POST"
-                       commandName="userCommand" cssClass="form-horizontal"
-                       id="edit-user-form">
-                <form:input path="id" id="id" type="hidden" value="${userCommand.id}"/>
+            <form action="#" method="POST" class="form-horizontal" id="edit-user-form"
+                th:action="@{/home/profile}" th:object="${userCommand}">
+                <input id="id" type="hidden" value="${userCommand.id}" th:field="*{id}"/>
 
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="username">
-                        <spring:message code="username.label"/>
+                        <span th:text="#{username.label}">Username</span>
                     </label>
 
                     <div class="col-sm-4">
-                        <form:input size="80" path="username" id="username"
-                                    cssClass="text"
-                                    value="${userCommand.username}" readonly="true"/>
+                        <input size="80" id="username" class="text" value="${userCommand.username}"
+                               th:field="*{username}"/>
                     </div>
                 </div>
 
