@@ -54,11 +54,11 @@
                 <ul class="nav navbar-nav navbar-right">
 
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuUser"
+                        <a class="dropdown-toggle" role="button" id="dropdownMenuUser"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <span sec:authentication="name">User</span>
                             <span class="caret"></span>
-                        </button>
+                        </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuUser">
                             <li>
                                 <form action="#" th:action="@{/logout}" method="post">

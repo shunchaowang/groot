@@ -1,5 +1,6 @@
 package me.smartstart.app.controller
 
+import me.smartstart.core.domain.User
 import me.smartstart.core.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.prepost.PreAuthorize
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.LocaleResolver
 
 import javax.servlet.http.HttpServletRequest
+import java.security.Principal
 
 @Controller
 class HomeController {
@@ -45,15 +47,35 @@ class HomeController {
         return 'login'
     }
 
-    // login form with error
-    @RequestMapping(value = '/login-error', method = RequestMethod.GET)
-    String loginError(Model model) {
-        model.addAttribute('loginError', true)
-        return 'login'
+    /**
+     * Principal and Authentication can both be auto binded by spring context.
+     * A principal can call name to get logged user's name,
+     * An authentication can be casted to UserDetails.
+     * @param principal
+     * @return
+     */
+    @GetMapping('/profile')
+    String profile(Principal principal) {
+        String username = principal.name
+        User = userService.findUserByUsername(username)
     }
 
     @GetMapping('/403')
     String error403() {
         return '403'
+    }
+
+    class UserCommand {
+
+        long id
+        String username
+        String firstName
+        String lastName
+        String description
+
+        UserCommand(User user) {
+
+            (id, username, firstName, lastName, description) = [user.id, user.firstName, user.lastName, user.description]
+        }
     }
 }

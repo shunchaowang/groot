@@ -28,6 +28,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="username">
                         <span th:text="#{username.label}">Username</span>
+                        <span class="required-indicator">*</span>
                     </label>
 
                     <div class="col-sm-4">
@@ -39,65 +40,49 @@
                 <!-- first name -->
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="firstName">
-                        <spring:message code="firstName.label"/>
+                        <span th:text="#{firstName.label}">First Name</span>
                         <span class="required-indicator">*</span>
                     </label>
 
                     <div class="col-sm-4">
-                        <form:input size="80" path="firstName" id="firstName"
-                                    cssClass="text"
-                                    required=""
-                                    value="${userCommand.firstName}"/>
+                        <input size="80" id="firstName" class="text" required="" value="${userCommand.firstName}"
+                            th:field="*{firstName}"/>
                     </div>
                 </div>
                 <!-- last name -->
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="lastName">
-                        <spring:message code="lastName.label"/>
+                        <span th:text="#{lastName.label}">Last Name</span>
                         <span class="required-indicator">*</span>
                     </label>
 
                     <div class="col-sm-4">
-                        <form:input size="80" path="lastName" id="lastName"
-                                    cssClass="text" required=""
-                                    value="${userCommand.lastName}"/>
+                        <input size="80" id="lastName" class="text" required="" value="${userCommand.lastName}"
+                            th:field="*{lastName}"/>
                     </div>
                 </div>
-                <!-- email -->
+                <!-- Description -->
                 <div class="form-group">
-                    <label class="col-sm-2 control-label" for="email">
-                        <spring:message code="email.label"/>
-                        <span class="required-indicator">*</span>
+                    <label class="col-sm-2 control-label" for="description">
+                        <span th:text="#{description.label}">Description</span>
                     </label>
 
                     <div class="col-sm-4">
-                        <form:input size="80" path="email" id="email" cssClass="text"
-                                    required=""
-                                    value="${userCommand.email}"/>
-                    </div>
-                </div>
-                <!-- remark -->
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" for="remark">
-                        <spring:message code="remark.label"/>
-                    </label>
-
-                    <div class="col-sm-4">
-                        <form:textarea cols="100" rows="5" path="remark" id="remark"
-                                       value="${userCommand.remark}"/>
+                        <textarea cols="100" rows="5" id="description" value="${userCommand.remark}"
+                            th:field="*{description}"></textarea>
                     </div>
                 </div>
                 <!-- buttons -->
                 <div class='form-group'>
                     <div class="col-sm-2 col-sm-offset-2">
                         <button class='btn btn-default' id='create-button' type="submit">
-                            <spring:message code='action.save.label'/>
+                            <span th:text="#{action.save.label}">Save</span>
                         </button>
                     </div>
                     <div class="col-sm-2">
-                        <a href="${rootURL}">
+                        <a href="#" th:href="@{/}">
                             <button type="button" class="btn btn-default">
-                                <spring:message code="action.return.label"/>
+                                <span th:text="#{action.return.label}">Return</span>
                             </button>
                         </a>
                     </div>

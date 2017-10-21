@@ -23,7 +23,7 @@ class MvcConfig extends WebMvcConfigurerAdapter {
 //(name = 'localeResolver')
     LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver()
-//        localeResolver.defaultLocale = new Locale("zh", "cn")
+//        localeResolver.defaultLocale = new Locale("zh", "cn") // the same with Locale.CHINA
         localeResolver.defaultLocale = Locale.CHINA
         return localeResolver
     }
