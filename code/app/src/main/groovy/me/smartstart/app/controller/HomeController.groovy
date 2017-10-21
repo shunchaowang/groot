@@ -33,7 +33,7 @@ class HomeController {
     }
 
     //@PreAuthorize("isAuthenticated() and hasAuthority('ROLE_ADMIN')")
-    @RequestMapping(['/home', '/index'])
+    @RequestMapping(['/home', '/index', '/'])
     String home() {
         def userCount = userService.countAllUser()
         println("uuuuser service: ${userCount}")

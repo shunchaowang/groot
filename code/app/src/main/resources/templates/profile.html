@@ -21,7 +21,7 @@
     </div>
     <div class="row">
         <div class="col-sm-8">
-            <form action="#" method="POST" class="form-horizontal" id="edit-user-form"
+            <form action="#" method="post" class="form-horizontal" id="edit-user-form"
                 th:action="@{/home/profile}" th:object="${userCommand}">
                 <input id="id" type="hidden" value="${userCommand.id}" th:field="*{id}"/>
 

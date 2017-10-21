@@ -77,7 +77,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/resources/**", '/webjars/**') // allow webjars go through
+                .antMatchers("/resources/**", '/webjars/**', '/js/**', '/css/**', '/images/**')
+                // allow webjars and static go through
     }
 
 /**
@@ -98,7 +99,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 //.csrf().disable() // enable csrf protection, logout can only be post
                 .authorizeRequests()
-                .antMatchers("/", "/signup", "/about").permitAll()
+                .antMatchers("/register", "/about").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
