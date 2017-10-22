@@ -42,7 +42,7 @@ class HomeController {
     String home() {
         def userCount = userService.countAllUser()
         println("uuuuser service: ${userCount}")
-        return 'home'
+        return 'home/index'
     }
 
     // login form
@@ -64,13 +64,13 @@ class HomeController {
         String username = principal.name
         User user = userService.findUserByUsername(username)
         model.addAttribute('userCommand', new UserCommand(user))
-        return 'profile'
+        return 'home/profile'
     }
 
     @PostMapping('/home/profile')
     String updateProfile(@Valid final UserCommand userCommand, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return 'profile'
+            return 'home/profile'
         }
 
         User user = userService.getUser(userCommand.id)

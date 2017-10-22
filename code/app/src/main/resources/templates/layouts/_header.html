@@ -52,15 +52,14 @@
                 </ul> <!-- end of navbar-nav -->
 
                 <ul class="nav navbar-nav navbar-right">
-
-                    <span th:text="#{lang.change}">Language</span>:
-                    <select id="locales">
-                        <option value=""></option>
-                        <option value="en" th:text="#{lang.eng}"></option>
-                        <option value="zh_cn" th:text="#{lang.zh_cn}"></option>
-                    </select>
-
-
+                    <div style="margin-right: 20px; margin-top: 10px">
+                        <span th:text="#{lang.change}">Language</span>:
+                        <select id="locales">
+                            <option value=""></option>
+                            <option value="en" th:text="#{lang.eng}"></option>
+                            <option value="zh_cn" th:text="#{lang.zh_cn}"></option>
+                        </select>
+                    </div>
                     <div class="dropdown">
                         <a class="dropdown-toggle" role="button" id="dropdownMenuUser"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

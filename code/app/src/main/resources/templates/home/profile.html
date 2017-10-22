@@ -57,7 +57,7 @@
                     </label>
 
                     <div class="col-sm-4">
-                        <input size="80" id="lastName" class="text" value="${userCommand.lastName}"
+                        <input size="80" id="lastName" class="text" value="${userCommand.lastName}" required=""
                             th:field="*{lastName}" th:class="${#fields.hasErrors('lastName')} ? fieldError"/>
                         <ul>
                             <li th:each="err: ${#fields.errors('lastName')}" th:text="${err}"></li>
