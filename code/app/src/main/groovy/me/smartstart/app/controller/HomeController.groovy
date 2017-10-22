@@ -81,6 +81,14 @@ class HomeController {
         return 'redirect:/home'
     }
 
+    @GetMapping('/home/password')
+    String password(Principal principal, Model model) {
+        String username = principal.name
+        User user = userService.findUserByUsername(username)
+        model.addAttribute('passwordCommand', new PasswordCommand(user))
+        return 'home/password'
+    }
+
     @GetMapping('/403')
     String error403() {
         return '403'
@@ -103,6 +111,23 @@ class UserCommand {
     UserCommand(User user) {
 
         (id, username, firstName, lastName, description) = [user.id, user.username, user.firstName, user.lastName, user.description]
+    }
+}
+
+class PasswordCommand {
+
+    long id
+    @NotEmpty
+    String currentPassword
+    @NotEmpty
+    String password
+    @NotEmpty
+    String confirmPassword
+
+    PasswordCommand() {}
+
+    PasswordCommand(User user) {
+        id = user.id
     }
 }
 
