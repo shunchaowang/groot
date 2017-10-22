@@ -50,6 +50,9 @@ dependencies {
 
     compile('org.codehaus.groovy:groovy')
 
+    // bean validation
+    compile("org.hibernate:hibernate-validator")
+
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('org.springframework.boot:spring-boot-starter-tomcat')
     //providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
