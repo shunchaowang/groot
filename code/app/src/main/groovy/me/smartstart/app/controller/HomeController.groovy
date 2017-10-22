@@ -4,8 +4,11 @@ import me.smartstart.core.domain.User
 import me.smartstart.core.service.UserService
 import org.hibernate.validator.constraints.NotEmpty
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.MessageSource
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
@@ -19,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView
 
 import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
+import javax.validation.constraints.AssertTrue
 import javax.validation.constraints.NotNull
 import java.security.Principal
 
@@ -29,7 +33,13 @@ class HomeController {
     UserService userService
 
     @Autowired
+    PasswordEncoder passwordEncoder
+
+    @Autowired
     LocaleResolver localeResolver
+
+    @Autowired
+    MessageSource messageSource
 
     @RequestMapping('/hello')
     //@ResponseBody
@@ -68,7 +78,7 @@ class HomeController {
     }
 
     @PostMapping('/home/profile')
-    String updateProfile(@Valid final UserCommand userCommand, final BindingResult bindingResult) {
+    String saveProfile(@Valid final UserCommand userCommand, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return 'home/profile'
         }
@@ -87,6 +97,26 @@ class HomeController {
         User user = userService.findUserByUsername(username)
         model.addAttribute('passwordCommand', new PasswordCommand(user))
         return 'home/password'
+    }
+
+    @PostMapping('/home/password')
+    String savePassword(@Valid final PasswordCommand passwordCommand, BindingResult bindingResult, Model model) {
+
+        User user = userService.getUser(passwordCommand.id)
+
+        if (!passwordEncoder.matches(passwordCommand.currentPassword, user.password)) {
+            Locale locale = LocaleContextHolder.locale
+            String error = messageSource.getMessage('password.not.match.message', null, locale)
+            bindingResult.rejectValue('password', error)
+        }
+        if (bindingResult.hasErrors()) {
+            return 'home/password'
+        }
+
+        user.password =passwordEncoder.encode(passwordCommand.password)
+        userService.saveUser(user)
+
+        return 'redirect:/home'
     }
 
     @GetMapping('/403')
@@ -128,6 +158,11 @@ class PasswordCommand {
 
     PasswordCommand(User user) {
         id = user.id
+    }
+
+    @AssertTrue(message = 'Confirm password must equal to password')
+    boolean isPasswordConfirmed() {
+        return confirmPassword == password
     }
 }
 

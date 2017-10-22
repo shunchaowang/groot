@@ -1,6 +1,6 @@
 (function ($) {
     $(function () {
-        $("#change-password").validate({
+        /*$("#change-password").validate({
             rules: {
                 currentPassword: {
                     required: true,
@@ -19,6 +19,6 @@
                     equalTo: "#password"
                 }
             }
-        });
+        });*/
     });
 })(jQuery);

@@ -11,8 +11,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 import org.springframework.web.servlet.i18n.SessionLocaleResolver
 
 /**
- * To make Thymeleaf pick up localeResolver and messageSource, either name the bean exactly the names with
- * localeResolver and messageSource, I guess Thymeleaf is doing auto wiring by bean's name, instead of type;
+ * To make Thymeleaf pick up localeResolver and messageSource, either name the beans
+ * localeResolver and messageSource, I guess Thymeleaf is doing auto wiring by bean's qualifier, instead of type;
  * or name the methods be the name of localeResolver and messageSource, this will make beans' default name to be methods
  * name unless specified explicitly.
  */
