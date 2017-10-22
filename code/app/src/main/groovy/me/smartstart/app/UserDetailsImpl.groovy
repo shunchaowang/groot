@@ -4,8 +4,8 @@ import me.smartstart.core.domain.MenuCategory
 import me.smartstart.core.domain.MenuItem
 import me.smartstart.core.domain.Permission
 import me.smartstart.core.domain.User
-import me.smartstart.navigation.Menu
-import me.smartstart.navigation.SubMenu
+import me.smartstart.app.vo.Menu
+import me.smartstart.app.vo.SubMenu
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

@@ -1,4 +1,4 @@
-package me.smartstart.navigation
+package me.smartstart.app.vo
 
 import me.smartstart.core.domain.MenuItem
 
