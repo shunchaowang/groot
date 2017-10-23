@@ -22,6 +22,8 @@ spring:
       ddl-auto: none # create database schema, can be create, create-drop, update, none (must be on production)
   thymeleaf:
     cache: false
+server:
+  port: 8000
 
 ---
 spring:
