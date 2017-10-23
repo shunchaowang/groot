@@ -191,7 +191,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 START TRANSACTION;
 USE `smartstart`;
 INSERT INTO `smartstart`.`user` (`id`, `username`, `password`, `first_name`, `last_name`, `profile_image`, `description`, `date_created`, `last_updated`, `active`) VALUES (1, 'admin', '$2a$10$Ce2HJja0Trha0ee3.rMqQewIzJMVe87.jNi5zF5gDdsyvHjJsnwOm', 'Admin', 'Admin', NULL, NULL, now(), NULL, 1);
-INSERT INTO `smartstart`.`user` (`id`, `username`, `password`, `first_name`, `last_name`, `profile_image`, `description`, `date_created`, `last_updated`, `active`) VALUES (2, 'user', '$2a$10$Ce2HJja0Trha0ee3.rMqQewIzJMVe87.jNi5zF5gDdsyvHjJsnwOm', 'User', 'User', NULL, NULL, now(), NULL, 1);
+INSERT INTO `smartstart`.`user` (`id`, `username`, `password`, `first_name`, `last_name`, `profile_image`, `description`, `date_created`, `last_updated`, `active`) VALUES (2, 'user', '$2a$10$kwTBVDaG5KyoFVed1wWItOSxeyehmtqy2TZ2vvcEzqpXGEoYlRu7W', 'User', 'User', NULL, NULL, now(), NULL, 1);
 
 COMMIT;
 
