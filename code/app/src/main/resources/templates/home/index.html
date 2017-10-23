@@ -10,7 +10,7 @@
 <body>
 <div layout:fragment="content">
     <div class="row">
-    <h1>Only administrator can see role below.</h1>
+        <h1>Only administrator can see role below.</h1>
         <!-- use this if going with role based authorization -->
         <span sec:authorize="hasAuthority('ROLE_ADMIN')">
             <span sec:authentication="principal.authorities">principal</span>

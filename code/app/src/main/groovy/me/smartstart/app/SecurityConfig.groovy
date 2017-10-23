@@ -78,7 +78,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
         web
                 .ignoring()
                 .antMatchers("/resources/**", '/webjars/**', '/js/**', '/css/**', '/images/**')
-                // allow webjars and static go through
+        // allow webjars and static go through
     }
 
 /**
@@ -97,18 +97,18 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // ROLEs must not have ROLE prefix
         http
-                //.csrf().disable() // enable csrf protection, logout can only be post
+        //.csrf().disable() // enable csrf protection, logout can only be post
                 .authorizeRequests()
                 .antMatchers("/register", "/about").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                //.failureUrl("/login-error") // default is login?error
+        //.failureUrl("/login-error") // default is login?error
                 .permitAll()
                 .and()
                 .logout()
-                //.logoutSuccessUrl("/login") // default is login?logout
+        //.logoutSuccessUrl("/login") // default is login?logout
                 .permitAll()
                 .and()
                 .exceptionHandling().accessDeniedPage("/403") // #4 denied, mapped in Controller

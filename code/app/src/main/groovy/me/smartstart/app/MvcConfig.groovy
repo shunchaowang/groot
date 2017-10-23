@@ -3,6 +3,8 @@ package me.smartstart.app
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.support.ReloadableResourceBundleMessageSource
+import org.springframework.validation.Validator
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 import org.springframework.web.multipart.commons.CommonsMultipartResolver
 import org.springframework.web.servlet.LocaleResolver
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
@@ -57,9 +59,7 @@ class MvcConfig extends WebMvcConfigurerAdapter {
         return multipartResolver
     }
 
-    // to make sure
     @Bean
-//(name = 'messageSource')
     ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource resource = new ReloadableResourceBundleMessageSource()
         // load messages.properties from classpath, it can also be in other locations
@@ -67,5 +67,37 @@ class MvcConfig extends WebMvcConfigurerAdapter {
         resource.defaultEncoding = 'UTF-8'
         resource.cacheSeconds = 3600
         return resource
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>This implementation returns {@code null}.
+     */
+    @Override
+    Validator getValidator() {
+        return validator()
+    }
+
+    /**
+     * Load ValidationMessages from classpath as a message source
+     * @return
+     */
+    private ReloadableResourceBundleMessageSource validationMessageSource() {
+        ReloadableResourceBundleMessageSource resource = new ReloadableResourceBundleMessageSource()
+        // load ValidationMessages.properties from classpath, it can also be in other locations
+        resource.basename = 'classpath:validation/ValidationMessages'
+        resource.defaultEncoding = 'UTF-8'
+        resource.cacheSeconds = 3600
+        return resource
+    }
+
+    /**
+     * create a validator factory from validation message source
+     * @return
+     */
+    private LocalValidatorFactoryBean validator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean()
+        bean.setValidationMessageSource(validationMessageSource())
+        return bean
     }
 }
