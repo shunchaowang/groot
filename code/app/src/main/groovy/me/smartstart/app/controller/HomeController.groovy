@@ -41,12 +41,6 @@ class HomeController {
     @Autowired
     MessageSource messageSource
 
-    @RequestMapping('/hello')
-    //@ResponseBody
-    String hello() {
-        return 'hello/hello'
-    }
-
     //@PreAuthorize("isAuthenticated() and hasAuthority('ROLE_ADMIN')")
     @RequestMapping(['/home', '/index', '/'])
     String home() {
@@ -106,8 +100,8 @@ class HomeController {
 
         if (!passwordEncoder.matches(passwordCommand.currentPassword, user.password)) {
             Locale locale = LocaleContextHolder.locale
-            String error = messageSource.getMessage('password.not.match.message', null, locale)
-            bindingResult.rejectValue('password', error)
+            String error = messageSource.getMessage('password.not.correct.message', null, locale)
+            bindingResult.rejectValue('password', 'user.password', error)
         }
         if (bindingResult.hasErrors()) {
             return 'home/password'
