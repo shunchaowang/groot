@@ -63,7 +63,7 @@ class MvcConfig extends WebMvcConfigurerAdapter {
     ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource resource = new ReloadableResourceBundleMessageSource()
         // load messages.properties from classpath, it can also be in other locations
-        resource.basename = 'classpath:i18n/messages'
+        resource.basename = 'classpath:messages'
         resource.defaultEncoding = 'UTF-8'
         resource.cacheSeconds = 3600
         return resource
@@ -85,7 +85,7 @@ class MvcConfig extends WebMvcConfigurerAdapter {
     private ReloadableResourceBundleMessageSource validationMessageSource() {
         ReloadableResourceBundleMessageSource resource = new ReloadableResourceBundleMessageSource()
         // load ValidationMessages.properties from classpath, it can also be in other locations
-        resource.basename = 'classpath:validation/ValidationMessages'
+        resource.basename = 'classpath:ValidationMessages'
         resource.defaultEncoding = 'UTF-8'
         resource.cacheSeconds = 3600
         return resource
