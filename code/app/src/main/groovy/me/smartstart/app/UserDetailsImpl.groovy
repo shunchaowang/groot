@@ -17,7 +17,7 @@ class UserDetailsImpl implements UserDetails {
 
     static final long serialVersionUID = 1L
 
-    private User user
+    User user
 
     HashSet<Permission> permissions
 

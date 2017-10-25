@@ -1,5 +1,6 @@
 package me.smartstart.app.controller
 
+import me.smartstart.app.UserDetailsImpl
 import me.smartstart.core.domain.User
 import me.smartstart.core.service.UserService
 import org.hibernate.validator.constraints.Email
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
+import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -63,21 +65,21 @@ class HomeController {
      */
     @GetMapping('/home/profile')
     String profile(Principal principal, Model model) {
-        String username = principal.name
-        User user = userService.findUserByUsername(username)
-        model.addAttribute('userCommand', new UserCommand(user))
+        UserDetailsImpl userDetails = (principal as Authentication).principal as UserDetailsImpl
+        User user = userDetails.user
+        model.addAttribute('profileCommand', new ProfileCommand(user))
         return 'home/profile'
     }
 
     @PostMapping('/home/profile')
-    String saveProfile(@Valid final UserCommand userCommand, final BindingResult bindingResult) {
+    String saveProfile(@Valid final ProfileCommand profileCommand, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return 'home/profile'
         }
 
-        User user = userService.getUser(userCommand.id)
+        User user = userService.getUser(profileCommand.id)
         user.with {
-            (username, firstName, lastName, description) = [userCommand.username, userCommand.firstName, userCommand.lastName, userCommand.description]
+            (username, firstName, lastName, description) = [profileCommand.username, profileCommand.firstName, profileCommand.lastName, profileCommand.description]
         }
         userService.saveUser(user)
         return 'redirect:/home'
@@ -117,7 +119,7 @@ class HomeController {
     }
 }
 
-class UserCommand {
+class ProfileCommand {
 
     long id
     @NotEmpty
@@ -129,9 +131,9 @@ class UserCommand {
     String lastName
     String description
 
-    UserCommand() {}
+    ProfileCommand() {}
 
-    UserCommand(User user) {
+    ProfileCommand(User user) {
 
         (id, username, firstName, lastName, description) = [user.id, user.username, user.firstName, user.lastName, user.description]
     }

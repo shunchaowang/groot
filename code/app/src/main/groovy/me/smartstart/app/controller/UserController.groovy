@@ -18,10 +18,13 @@ class UserController {
     // index view
     // Role and Authority are the same, hasRole and hasAuthority are the same as well.
     // hasAuthority('ROLE_ADMIN') has same result with hasRole('ROLE_ADMIN')
-    @PreAuthorize("isAuthenticated() and hasAuthority('ROLE_ADMIN')")
+    // @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("hasAuthority('ROLE_ADMIN')") // role based, isAuthenticated is not necessary here
+    @PreAuthorize("hasPermission('', 'userManagement')") // permission based
     @GetMapping('/index')
     String index() {
        return 'index'
     }
+
 
 }
