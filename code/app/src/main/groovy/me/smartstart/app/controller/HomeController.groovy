@@ -66,7 +66,8 @@ class HomeController {
     @GetMapping('/home/profile')
     String profile(Principal principal, Model model) {
         UserDetailsImpl userDetails = (principal as Authentication).principal as UserDetailsImpl
-        User user = userDetails.user
+        User user = userService.findUserByUsername(userDetails.username)
+
         model.addAttribute('profileCommand', new ProfileCommand(user))
         return 'home/profile'
     }

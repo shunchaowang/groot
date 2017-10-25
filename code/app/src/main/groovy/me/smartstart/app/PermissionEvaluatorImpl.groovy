@@ -1,6 +1,5 @@
 package me.smartstart.app
 
-import me.smartstart.core.domain.Permission
 import me.smartstart.core.service.UserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -31,12 +30,9 @@ class PermissionEvaluatorImpl implements PermissionEvaluator {
     boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
 
         logger.debug("Evaluate permission ${permission}")
-        Permission permissionObj = userService.findPermissionByName(permission as String)
-        if (!permissionObj) return false
-
         UserDetailsImpl userDetails = authentication.principal as UserDetailsImpl
         logger.debug("Evaluate permission for user ${userDetails.username}")
-        return userDetails?.permissions?.contains(permissionObj)
+        return userDetails?.permissions?.contains(permission as String)
     }
 
     /**

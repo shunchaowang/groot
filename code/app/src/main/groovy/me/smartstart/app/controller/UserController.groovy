@@ -16,10 +16,8 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseBody
 
 import javax.persistence.criteria.CriteriaBuilder
@@ -42,13 +40,16 @@ class UserController {
     // Role and Authority are the same, hasRole and hasAuthority are the same as well.
     // hasAuthority('ROLE_ADMIN') has same result with hasRole('ROLE_ADMIN')
     // @PreAuthorize("isAuthenticated()")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')") // role based, isAuthenticated is not necessary here
-    //@PreAuthorize("hasPermission('', 'userManagement')") // permission based
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')") // role based, isAuthenticated is not necessary here
+    @PreAuthorize("hasPermission('', 'manageUser')")
+    // permission based
     @GetMapping('/index')
     String index() {
         return 'user/index'
     }
 
+    @PreAuthorize("hasPermission('', 'manageUser')")
+    // permission based
     @GetMapping(value = 'list', produces = 'application/json;charset=UTF-8')
     @ResponseBody
     String list(HttpServletRequest request) {

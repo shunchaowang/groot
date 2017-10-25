@@ -17,32 +17,33 @@ class UserDetailsImpl implements UserDetails {
 
     static final long serialVersionUID = 1L
 
-    User user
-
-    HashSet<Permission> permissions
+    private User user
+    HashSet<String> permissions
 
     List<Menu> menus
 
-    List<Menu> getMenus() {
-        return menus
-    }
-
     UserDetailsImpl(User user) {
         this.user = user
-
         permissions = new HashSet<>()
-        permissions.addAll(user.permissions)
+
+        Set<Permission> permissionCombined = new HashSet<>()
+
+        permissionCombined.addAll(user.permissions)
 
         user.roles.each {
-            permissions.addAll(it.permissions)
+            permissionCombined.addAll(it.permissions)
         }
 
         // get all menu items and categories from the user and map them to Navigation menu, they have
         // to be sorted to make sure they stay the same order every time
         HashMap<String, Menu> menuMap = new HashMap<>()
 
-        permissions.each {
+        permissionCombined.each {
 
+            // put permission name into permissions to support permission evaluator
+            permissions.add(it.name)
+
+            // get all menus and submenus, sort as well
             MenuItem menuItem = it.menuItem
             if (!menuItem) return
             MenuCategory menuCategory = menuItem.menuCategory
