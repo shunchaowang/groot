@@ -5,32 +5,32 @@
     <meta charset="UTF-8"/>
     <title>Smart Boot Web Application</title>
 
-    <link rel="stylesheet" href="../../static/vendors/bootstrap-3.3.7/dist/css/bootstrap.css"
-          th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="../../static/vendors/bootstrap-3.3.7/dist/css/bootstrap-theme.css"
-          th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.min.css}"/>
+    <link rel="stylesheet" href="../../static/vendors/bootstrap/css/bootstrap.css"
+          th:href="@{/vendors/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="../../static/vendors/bootstrap/css/bootstrap-theme.css"
+          th:href="@{/vendors/bootstrap/css/bootstrap-theme.min.css}"/>
     <link rel="stylesheet" href="../../static/css/app.css" th:href="@{/css/app.css}"/>
 </head>
 
 <body class="container">
 
-<div th:replace="layouts/_header :: navbar"/>
+<div th:replace="layouts/_header :: navbar"></div>
 
 <div layout:fragment="content">
     Page content goes here
 </div>
 
-<div th:replace="layouts/_footer :: footer"/>
+<div th:replace="layouts/_footer :: footer"></div>
 
 
-<script src="../../static/vendors/jquery-3.2.1.js"
-        th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
-<script src="../../static/vendors/bootstrap-3.3.7/dist/js/bootstrap.js"
-        th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
-<script src="../../static/vendors/jquery.validate.js"
-        th:src="@{/webjars/jquery-validation/1.17.0/jquery.validate.min.js}"></script>
+<script src="../../static/vendors/jquery/jquery.js"
+        th:src="@{/vendors/jquery/jquery.min.js}"></script>
+<script src="../../static/vendors/bootstrap/js/bootstrap.js"
+        th:src="@{/vendors/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/vendors/jquery/jquery.validate.js"
+        th:src="@{/vendors/jquery/jquery.validate.min.js}"></script>
 <script src="../../static/vendors/URI.js"
-        th:src="@{/webjars/uri.js/1.17.1/src/URI.min.js}"></script>
+        th:src="@{/vendors/URI.min.js}"></script>
 
 
 <script src="../../static/js/app.js" th:src="@{/js/app.js}"></script>

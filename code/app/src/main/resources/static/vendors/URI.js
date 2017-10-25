@@ -1,7 +1,7 @@
 /*!
  * URI.js - Mutating URLs
  *
- * Version: 1.17.1
+ * Version: 1.19.0
  *
  * Author: Rodney Rehm
  * Web: http://medialize.github.io/URI.js/
@@ -13,7 +13,7 @@
 (function (root, factory) {
   'use strict';
   // https://github.com/umdjs/umd/blob/master/returnExports.js
-  if (typeof exports === 'object') {
+  if (typeof module === 'object' && module.exports) {
     // Node
     module.exports = factory(require('./punycode'), require('./IPv6'), require('./SecondLevelDomains'));
   } else if (typeof define === 'function' && define.amd) {
@@ -61,6 +61,12 @@
       }
     }
 
+    if (url === null) {
+      if (_urlSupplied) {
+        throw new TypeError('null is not a valid argument for URI');
+      }
+    }
+
     this.href(url);
 
     // resolve to base according to http://dvcs.w3.org/hg/url/raw-file/tip/Overview.html#constructor
@@ -71,7 +77,11 @@
     return this;
   }
 
-  URI.version = '1.17.1';
+  function isInteger(value) {
+    return /^[0-9]+$/.test(value);
+  }
+
+  URI.version = '1.19.0';
 
   var p = URI.prototype;
   var hasOwn = Object.prototype.hasOwnProperty;
@@ -191,17 +201,22 @@
       query: null,
       fragment: null,
       // state
+      preventInvalidHostname: URI.preventInvalidHostname,
       duplicateQueryParameters: URI.duplicateQueryParameters,
       escapeQuerySpace: URI.escapeQuerySpace
     };
   };
+  // state: throw on invalid hostname
+  // see https://github.com/medialize/URI.js/pull/345
+  // and https://github.com/medialize/URI.js/issues/354
+  URI.preventInvalidHostname = false;
   // state: allow duplicate query parameters (a=1&a=1)
   URI.duplicateQueryParameters = false;
   // state: replaces + with %20 (space in query strings)
   URI.escapeQuerySpace = true;
   // static properties
   URI.protocol_expression = /^[a-z][a-z0-9.+-]*$/i;
-  URI.idn_expression = /[^a-z0-9\.-]/i;
+  URI.idn_expression = /[^a-z0-9\._-]/i;
   URI.punycode_expression = /(xn--)/i;
   // well, 333.444.555.666 matches, but it sure ain't no IPv4 - do we care?
   URI.ip4_expression = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
@@ -220,7 +235,9 @@
     // everything up to the next whitespace
     end: /[\s\r\n]|$/,
     // trim trailing punctuation captured by end RegExp
-    trim: /[`!()\[\]{};:'".,<>?«»“”„‘’]+$/
+    trim: /[`!()\[\]{};:'".,<>?«»“”„‘’]+$/,
+    // balanced parens inclusion (), [], {}, <>
+    parens: /(\([^\)]*\)|\[[^\]]*\]|\{[^}]*\}|<[^>]*>)/g,
   };
   // http://www.iana.org/assignments/uri-schemes.html
   // http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Well-known_ports
@@ -232,10 +249,16 @@
     ws: '80',
     wss: '443'
   };
+  // list of protocols which always require a hostname
+  URI.hostProtocols = [
+    'http',
+    'https'
+  ];
+
   // allowed hostname characters according to RFC 3986
   // ALPHA DIGIT "-" "." "_" "~" "!" "$" "&" "'" "(" ")" "*" "+" "," ";" "=" %encoded
-  // I've never seen a (non-IDN) hostname other than: ALPHA DIGIT . -
-  URI.invalid_hostname_characters = /[^a-zA-Z0-9\.-]/;
+  // I've never seen a (non-IDN) hostname other than: ALPHA DIGIT . - _
+  URI.invalid_hostname_characters = /[^a-zA-Z0-9\.\-:_]/;
   // map DOM Elements to their URI attribute
   URI.domAttributes = {
     'a': 'href',
@@ -467,7 +490,9 @@
   URI.parse = function(string, parts) {
     var pos;
     if (!parts) {
-      parts = {};
+      parts = {
+        preventInvalidHostname: URI.preventInvalidHostname
+      };
     }
     // [protocol"://"[username[":"password]"@"]hostname[":"port]"/"?][path]["?"querystring]["#"fragment]
 
@@ -520,6 +545,10 @@
     return parts;
   };
   URI.parseHost = function(string, parts) {
+    if (!string) {
+      string = '';
+    }
+
     // Copy chrome, IE, opera backslash-handling behavior.
     // Back slashes before the query string get converted to forward slashes
     // See: https://github.com/joyent/node/blob/386fd24f49b0e9d1a8a076592a404168faeecc34/lib/url.js#L115-L124
@@ -565,6 +594,14 @@
     if (parts.hostname && string.substring(pos).charAt(0) !== '/') {
       pos++;
       string = '/' + string;
+    }
+
+    if (parts.preventInvalidHostname) {
+      URI.ensureValidHostname(parts.hostname, parts.protocol);
+    }
+
+    if (parts.port) {
+      URI.ensureValidPort(parts.port);
     }
 
     return string.substring(pos) || '/';
@@ -685,11 +722,13 @@
 
     if (parts.username) {
       t += URI.encode(parts.username);
+    }
 
-      if (parts.password) {
-        t += ':' + URI.encode(parts.password);
-      }
+    if (parts.password) {
+      t += ':' + URI.encode(parts.password);
+    }
 
+    if (t) {
       t += '@';
     }
 
@@ -754,6 +793,21 @@
       throw new TypeError('URI.addQuery() accepts an object, string as the name parameter');
     }
   };
+
+  URI.setQuery = function(data, name, value) {
+    if (typeof name === 'object') {
+      for (var key in name) {
+        if (hasOwn.call(name, key)) {
+          URI.setQuery(data, key, name[key]);
+        }
+      }
+    } else if (typeof name === 'string') {
+      data[name] = value === undefined ? null : value;
+    } else {
+      throw new TypeError('URI.setQuery() accepts an object, string as the name parameter');
+    }
+  };
+
   URI.removeQuery = function(data, name, value) {
     var i, length, key;
 
@@ -878,6 +932,39 @@
   };
 
 
+  URI.joinPaths = function() {
+    var input = [];
+    var segments = [];
+    var nonEmptySegments = 0;
+
+    for (var i = 0; i < arguments.length; i++) {
+      var url = new URI(arguments[i]);
+      input.push(url);
+      var _segments = url.segment();
+      for (var s = 0; s < _segments.length; s++) {
+        if (typeof _segments[s] === 'string') {
+          segments.push(_segments[s]);
+        }
+
+        if (_segments[s]) {
+          nonEmptySegments++;
+        }
+      }
+    }
+
+    if (!segments.length || !nonEmptySegments) {
+      return new URI('');
+    }
+
+    var uri = new URI('').segment(segments);
+
+    if (input[0].path() === '' || input[0].path().slice(0, 1) === '/') {
+      uri.path('/' + uri.path());
+    }
+
+    return uri.normalize();
+  };
+
   URI.commonPath = function(one, two) {
     var length = Math.min(one.length, two.length);
     var pos;
@@ -907,6 +994,7 @@
     var _start = options.start || URI.findUri.start;
     var _end = options.end || URI.findUri.end;
     var _trim = options.trim || URI.findUri.trim;
+    var _parens = options.parens || URI.findUri.parens;
     var _attributeOpen = /[a-z0-9-]=["']?$/i;
 
     _start.lastIndex = 0;
@@ -926,13 +1014,43 @@
       }
 
       var end = start + string.slice(start).search(_end);
-      var slice = string.slice(start, end).replace(_trim, '');
+      var slice = string.slice(start, end);
+      // make sure we include well balanced parens
+      var parensEnd = -1;
+      while (true) {
+        var parensMatch = _parens.exec(slice);
+        if (!parensMatch) {
+          break;
+        }
+
+        var parensMatchEnd = parensMatch.index + parensMatch[0].length;
+        parensEnd = Math.max(parensEnd, parensMatchEnd);
+      }
+
+      if (parensEnd > -1) {
+        slice = slice.slice(0, parensEnd) + slice.slice(parensEnd).replace(_trim, '');
+      } else {
+        slice = slice.replace(_trim, '');
+      }
+
+      if (slice.length <= match[0].length) {
+        // the extract only contains the starting marker of a URI,
+        // e.g. "www" or "http://"
+        continue;
+      }
+
       if (options.ignore && options.ignore.test(slice)) {
         continue;
       }
 
       end = start + slice.length;
       var result = callback(slice, start, end, string);
+      if (result === undefined) {
+        _start.lastIndex = end;
+        continue;
+      }
+
+      result = String(result);
       string = string.slice(0, start) + result + string.slice(end);
       _start.lastIndex = start + result.length;
     }
@@ -941,20 +1059,42 @@
     return string;
   };
 
-  URI.ensureValidHostname = function(v) {
+  URI.ensureValidHostname = function(v, protocol) {
     // Theoretically URIs allow percent-encoding in Hostnames (according to RFC 3986)
     // they are not part of DNS and therefore ignored by URI.js
 
-    if (v.match(URI.invalid_hostname_characters)) {
+    var hasHostname = !!v; // not null and not an empty string
+    var hasProtocol = !!protocol;
+    var rejectEmptyHostname = false;
+
+    if (hasProtocol) {
+      rejectEmptyHostname = arrayContains(URI.hostProtocols, protocol);
+    }
+
+    if (rejectEmptyHostname && !hasHostname) {
+      throw new TypeError('Hostname cannot be empty, if protocol is ' + protocol);
+    } else if (v && v.match(URI.invalid_hostname_characters)) {
       // test punycode
       if (!punycode) {
-        throw new TypeError('Hostname "' + v + '" contains characters other than [A-Z0-9.-] and Punycode.js is not available');
+        throw new TypeError('Hostname "' + v + '" contains characters other than [A-Z0-9.-:_] and Punycode.js is not available');
       }
-
       if (punycode.toASCII(v).match(URI.invalid_hostname_characters)) {
-        throw new TypeError('Hostname "' + v + '" contains characters other than [A-Z0-9.-]');
+        throw new TypeError('Hostname "' + v + '" contains characters other than [A-Z0-9.-:_]');
       }
     }
+  };
+
+  URI.ensureValidPort = function (v) {
+    if (!v) {
+      return;
+    }
+
+    var port = Number(v);
+    if (isInteger(port) && (port > 0) && (port < 65536)) {
+      return;
+    }
+
+    throw new TypeError('Port "' + v + '" is not a valid port');
   };
 
   // noConflict
@@ -1185,16 +1325,15 @@
   var _hostname = p.hostname;
 
   p.protocol = function(v, build) {
-    if (v !== undefined) {
-      if (v) {
-        // accept trailing ://
-        v = v.replace(/:(\/\/)?$/, '');
+    if (v) {
+      // accept trailing ://
+      v = v.replace(/:(\/\/)?$/, '');
 
-        if (!v.match(URI.protocol_expression)) {
-          throw new TypeError('Protocol "' + v + '" contains characters other than [A-Z0-9.+-] or doesn\'t start with [A-Z]');
-        }
+      if (!v.match(URI.protocol_expression)) {
+        throw new TypeError('Protocol "' + v + '" contains characters other than [A-Z0-9.+-] or doesn\'t start with [A-Z]');
       }
     }
+
     return _protocol.call(this, v, build);
   };
   p.scheme = p.protocol;
@@ -1214,9 +1353,7 @@
           v = v.substring(1);
         }
 
-        if (v.match(/[^0-9]/)) {
-          throw new TypeError('Port "' + v + '" contains characters other than [0-9]');
-        }
+        URI.ensureValidPort(v);
       }
     }
     return _port.call(this, v, build);
@@ -1227,14 +1364,18 @@
     }
 
     if (v !== undefined) {
-      var x = {};
+      var x = { preventInvalidHostname: this._parts.preventInvalidHostname };
       var res = URI.parseHost(v, x);
       if (res !== '/') {
         throw new TypeError('Hostname "' + v + '" contains characters other than [A-Z0-9.-]');
       }
 
       v = x.hostname;
+      if (this._parts.preventInvalidHostname) {
+        URI.ensureValidHostname(v, this._parts.protocol);
+      }
     }
+
     return _hostname.call(this, v, build);
   };
 
@@ -1301,12 +1442,8 @@
     }
 
     if (v === undefined) {
-      if (!this._parts.username) {
-        return '';
-      }
-
       var t = URI.buildUserinfo(this._parts);
-      return t.substring(0, t.length -1);
+      return t ? t.substring(0, t.length -1) : t;
     } else {
       if (v[v.length-1] !== '@') {
         v += '@';
@@ -1356,8 +1493,12 @@
         v += '.';
       }
 
+      if (v.indexOf(':') !== -1) {
+        throw new TypeError('Domains cannot contain colons');
+      }
+
       if (v) {
-        URI.ensureValidHostname(v);
+        URI.ensureValidHostname(v, this._parts.protocol);
       }
 
       this._parts.hostname = this._parts.hostname.replace(replace, v);
@@ -1396,7 +1537,11 @@
         throw new TypeError('cannot set domain empty');
       }
 
-      URI.ensureValidHostname(v);
+      if (v.indexOf(':') !== -1) {
+        throw new TypeError('Domains cannot contain colons');
+      }
+
+      URI.ensureValidHostname(v, this._parts.protocol);
 
       if (!this._parts.hostname || this.is('IP')) {
         this._parts.hostname = v;
@@ -1507,7 +1652,7 @@
       return v === undefined ? '' : this;
     }
 
-    if (v === undefined || v === true) {
+    if (typeof v !== 'string') {
       if (!this._parts.path || this._parts.path === '/') {
         return '';
       }
@@ -2007,7 +2152,10 @@
       base = new URI(base);
     }
 
-    if (!resolved._parts.protocol) {
+    if (resolved._parts.protocol) {
+      // Directly returns even if this._parts.hostname is empty.
+      return resolved;
+    } else {
       resolved._parts.protocol = base._parts.protocol;
     }
 
@@ -2024,15 +2172,17 @@
       if (!resolved._parts.query) {
         resolved._parts.query = base._parts.query;
       }
-    } else if (resolved._parts.path.substring(-2) === '..') {
-      resolved._parts.path += '/';
-    }
+    } else {
+      if (resolved._parts.path.substring(-2) === '..') {
+        resolved._parts.path += '/';
+      }
 
-    if (resolved.path().charAt(0) !== '/') {
-      basedir = base.directory();
-      basedir = basedir ? basedir : base.path().indexOf('/') === 0 ? '/' : '';
-      resolved._parts.path = (basedir ? (basedir + '/') : '') + resolved._parts.path;
-      resolved.normalizePath();
+      if (resolved.path().charAt(0) !== '/') {
+        basedir = base.directory();
+        basedir = basedir ? basedir : base.path().indexOf('/') === 0 ? '/' : '';
+        resolved._parts.path = (basedir ? (basedir + '/') : '') + resolved._parts.path;
+        resolved.normalizePath();
+      }
     }
 
     resolved.build();
@@ -2165,6 +2315,11 @@
   };
 
   // state
+  p.preventInvalidHostname = function(v) {
+    this._parts.preventInvalidHostname = !!v;
+    return this;
+  };
+
   p.duplicateQueryParameters = function(v) {
     this._parts.duplicateQueryParameters = !!v;
     return this;
