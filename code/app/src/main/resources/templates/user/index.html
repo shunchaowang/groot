@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/main">
+<head>
+    <title th:with="entity=#{user.label}" th:text="#{manage.label(${entity})}">User Management</title>
+</head>
+<body th:with="entity=#{user.label}">
+<div layout:fragment="content">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <i class="glyphicon glyphicon-home"></i>
+                <span th:text="#{home.label}">Home</span>
+            </li>
+            <li>
+                <i class="glyphicon glyphicon-list"></i>
+                <span th:text="#{manage.label(${entity})}">User Management</span>
+            </li>
+            <li class="active">
+                <i class="glyphicon glyphicon-list"></i>
+                <span th:text="#{index.label(${entity})}">User List</span>
+            </li>
+        </ol>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered" id="user-table">
+                <thead>
+                <tr>
+                    <th><span th:text="#{id.label}">Id</span></th>
+                    <th><span th:text="#{username.label}">Username</span></th>
+                    <th><span th:text="#{firstName.label}">First Name</span></th>
+                    <th><span th:text="#{lastName.label}">Last Name</span></th>
+                    <th><span th:text="#{dateCreated.label}">Created Time</span></th>
+                    <th><span th:text="#{action.operation.label}">Operation</span></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="scripts">
+    <script src="/js/user/index.js"></script>
+</th:block>
+</body>
+</html>
