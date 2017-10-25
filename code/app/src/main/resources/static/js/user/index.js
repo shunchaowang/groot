@@ -36,12 +36,12 @@
                     'render': function (data, type, row) {
                         var operations = '<button type="button" name="edit-button" '
                             + 'class="btn btn-default" value="' + row['id'] + '">'
-                            + '<spring:message code="action.edit.label"/>'
+                            + 'Edit'
                             + '</button>';
                         operations += '<button type="button" name="archive-button"'
                             + ' data-username="' + row['username'] + '"'
                             + ' class="btn btn-default" value="' + row['id'] + '">' +
-                            "${archiveLabel}"
+                            "Archive"
                             + '</button>';
                         return operations;
                     }

@@ -2,11 +2,12 @@ package me.smartstart.app.vo
 
 class DataTableResult<T> {
 
-    int recordsTotal
-    int recordsFiltered
+    long recordsTotal
+    long recordsFiltered
     List<T> data
+    int draw // the same value with the request
 
-    DataTableResult() {
-        data = new ArrayList<>()
+    DataTableResult(DataTableParams params) {
+        draw = params.draw
     }
 }
