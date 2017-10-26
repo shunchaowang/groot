@@ -3,6 +3,7 @@ package me.smartstart.app.controller
 import me.smartstart.app.util.JsonUtil
 import me.smartstart.app.vo.DataTableParams
 import me.smartstart.app.vo.DataTableResult
+import me.smartstart.app.vo.UserCommand
 import me.smartstart.core.domain.Role
 import me.smartstart.core.domain.User
 import me.smartstart.core.repository.UserRepository
@@ -99,58 +100,5 @@ class UserController {
         result.recordsFiltered = userRepository.count(specification)
 
         JsonUtil.toJson(result)
-    }
-}
-
-class UserCommand {
-
-    long id
-    @NotEmpty
-    @Email
-    String username
-    @NotEmpty
-    String firstName
-    @NotEmpty
-    String lastName
-    String description
-    String dateCreated
-    String lastUpdated
-
-    Set<RoleCommand> roles
-
-    UserCommand() {}
-
-    UserCommand(User user) {
-        id = user.id
-        username = user.username
-        firstName = user.firstName
-        lastName = user.lastName
-        description = user.description
-        Locale locale = LocaleContextHolder.locale
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale)
-        dateCreated = dateFormat.format(user.dateCreated)
-        if (user.lastUpdated) {
-            lastUpdated = dateFormat.format(user.lastUpdated)
-        }
-
-        roles = new HashSet<>()
-        user.roles?.each {
-            RoleCommand role = new RoleCommand(it)
-            roles.add(role)
-        }
-    }
-}
-
-class RoleCommand {
-
-    long id
-    String name
-
-    RoleCommand() {}
-
-    RoleCommand(Role role) {
-
-        id = role.id
-        name = role.name
     }
 }
