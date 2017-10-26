@@ -1,6 +1,33 @@
 (function ($) {
     $(function () {
+        $.fn.dataTable.ext.buttons.custom = {
+            text: 'Create',
+            action: function () {
+                var dialog = $( "#user-dialog" ).dialog({
+                    autoOpen: false,
+                    height: 400,
+                    width: 350,
+                    modal: true,
+                    buttons: {
+                        Cancel: function() {
+                            dialog.dialog( "close" );
+                        }
+                    },
+                    close: function() {
+                        form[ 0 ].reset();
+                    }
+                });
+                dialog.open('open');
+            }
+        };
         var userTable = $('#user-table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'colvis',
+                'excel',
+                'print',
+                'custom'
+            ],
             'processing': true,
             'serverSide': true,
             'paging': true,
@@ -11,26 +38,7 @@
                 'type': "GET",
                 'dataType': 'json'
             },
-            dom: 'Bfrtip',        // element order: NEEDS BUTTON CONTAINER (B) ****
-            select: 'single',     // enable single row selection
-            responsive: true,     // enable responsiveness
-            altEditor: true,      // Enable altEditor ****
-            buttons: [
-                {
-                text: 'Add',
-                name: 'add'        // DO NOT change name
-                },
-                {
-                    extend: 'selected', // Bind to Selected row
-                    text: 'Edit',
-                    name: 'edit'        // DO NOT change name
-                },
-                {
-                    extend: 'selected', // Bind to Selected row
-                    text: 'Delete',
-                    name: 'delete'      // DO NOT change name
-                }
-            ],
+
             // MUST HAVE DATA ON COLUMNDEFS IF SERVER RESPONSE IS JSON ARRAY!!!
             'columnDefs': [
                 {'name': 'id', 'targets': 0, 'visible': false, 'data': 'id'},
