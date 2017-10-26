@@ -23,10 +23,23 @@ spring:
   thymeleaf:
     cache: false
 server:
-  port: 8000
-
+  port: 8080
+logging:
+  level:
+    ROOT: ERROR
+    me.smartstart.app: DEBUG
+    me.smartstart.core: DEBUG
+    org.springframework: DEBUG
+    org.springframework.data: TRACE
+    org.springframework.data.domain: TRACE
+    org.springframework.data.jpa.domain: TRACE
 ---
 spring:
   profiles: prod
   datasource:
     jndi-name: [jndi-name]
+logging:
+  level:
+    ROOT: ERROR
+    me.smartstart.app: DEBUG
+    me.smartstart.core: DEBUG
