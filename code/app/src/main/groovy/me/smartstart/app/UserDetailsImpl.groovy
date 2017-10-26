@@ -15,8 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails
  */
 class UserDetailsImpl implements UserDetails {
 
-    static final long serialVersionUID = 1L
-
     private User user
     HashSet<String> permissions
 
