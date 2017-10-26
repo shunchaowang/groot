@@ -4,6 +4,13 @@
       layout:decorator="layouts/main">
 <head>
     <title th:with="entity=#{user.label}" th:text="#{manage.label(${entity})}">User Management</title>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        var listUserUrl = /*[[@{/user/list}]]*/ '/user/list';
+
+        /*]]>*/
+    </script>
 </head>
 <body th:with="entity=#{user.label}">
 <div layout:fragment="content">
@@ -34,7 +41,7 @@
                     <th><span th:text="#{firstName.label}">First Name</span></th>
                     <th><span th:text="#{lastName.label}">Last Name</span></th>
                     <th><span th:text="#{dateCreated.label}">Created Time</span></th>
-                    <th><span th:text="#{action.operation.label}">Operation</span></th>
+                    <th><span th:text="#{lastUpdated.label}">Updated Time</span></th>
                 </tr>
                 </thead>
                 <tbody></tbody>

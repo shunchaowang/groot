@@ -116,7 +116,9 @@ class UserCommand {
         Locale locale = LocaleContextHolder.locale
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale)
         dateCreated = dateFormat.format(user.dateCreated)
-        //lastUpdated = dateFormat.format(user.lastUpdated)
+        if (user.lastUpdated) {
+            lastUpdated = dateFormat.format(user.lastUpdated)
+        }
     }
 
 }

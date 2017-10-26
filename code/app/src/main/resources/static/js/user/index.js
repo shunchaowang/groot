@@ -7,45 +7,46 @@
             "paginationType": "full_numbers",
             "order": [[0, "desc"]],
             'ajax': {
-                'url': "/user/list",
+                'url': listUserUrl,
                 'type': "GET",
                 'dataType': 'json'
             },
+            dom: 'Bfrtip',        // element order: NEEDS BUTTON CONTAINER (B) ****
+            select: 'single',     // enable single row selection
+            responsive: true,     // enable responsiveness
+            altEditor: true,      // Enable altEditor ****
+            buttons: [
+                {
+                text: 'Add',
+                name: 'add'        // DO NOT change name
+                },
+                {
+                    extend: 'selected', // Bind to Selected row
+                    text: 'Edit',
+                    name: 'edit'        // DO NOT change name
+                },
+                {
+                    extend: 'selected', // Bind to Selected row
+                    text: 'Delete',
+                    name: 'delete'      // DO NOT change name
+                }
+            ],
             // MUST HAVE DATA ON COLUMNDEFS IF SERVER RESPONSE IS JSON ARRAY!!!
             'columnDefs': [
                 {'name': 'id', 'targets': 0, 'visible': false, 'data': 'id'},
                 {
-                    'name': 'username', 'targets': 1, 'data': 'username',
-                    'orderable': false,
-                    'render': function (data, type, row) {
-                        return '<a href=' + "/user" + '/show/'
-                            + row['id'] + '>' + data + '</a>';
-                    }
+                    'name': 'username', 'targets': 1, 'data': 'username', 'orderable': false
                 },
                 {
-                    'name': 'firstName', 'targets': 2, 'data': 'firstName', 'searchable': false,
+                    'name': 'firstName', 'targets': 2, 'data': 'firstName', 'searchable': true,
                     'orderable': false
                 },
                 {
-                    'name': 'lastName', 'targets': 3, 'data': 'lastName', 'searchable': false,
+                    'name': 'lastName', 'targets': 3, 'data': 'lastName', 'searchable': true,
                     'orderable': false
                 },
                 {'name': 'dateCreated', 'targets': 4, 'searchable': false, 'data': 'dateCreated'},
-                {
-                    'name': 'operation', 'targets': 5, 'searchable': false, 'orderable': false,
-                    'render': function (data, type, row) {
-                        var operations = '<button type="button" name="edit-button" '
-                            + 'class="btn btn-default" value="' + row['id'] + '">'
-                            + 'Edit'
-                            + '</button>';
-                        operations += '<button type="button" name="archive-button"'
-                            + ' data-username="' + row['username'] + '"'
-                            + ' class="btn btn-default" value="' + row['id'] + '">' +
-                            "Archive"
-                            + '</button>';
-                        return operations;
-                    }
-                }
+                {'name': 'lastUpdated', 'targets': 5, 'searchable': false, 'data': 'lastUpdated'}
             ]
         });
     });
