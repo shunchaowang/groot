@@ -1,23 +1,32 @@
 (function ($) {
     $(function () {
-        $.fn.dataTable.ext.buttons.custom = {
+
+        var dialog, form;
+
+        dialog = $( "#user-dialog" ).dialog({
+            autoOpen: false,
+            height: 400,
+            width: 400,
+            modal: true,
+            buttons: {
+                'Create a user': function() {},
+                'Cancel': function() {
+                    dialog.dialog( "close" );
+                }
+            },
+            close: function() {
+                form[0].reset();
+            }
+        });
+
+        form = dialog.find( "form" ).on( "submit", function( event ) {
+            event.preventDefault();
+        });
+
+        $.fn.dataTable.ext.buttons.create = {
             text: 'Create',
             action: function () {
-                var dialog = $( "#user-dialog" ).dialog({
-                    autoOpen: false,
-                    height: 400,
-                    width: 350,
-                    modal: true,
-                    buttons: {
-                        Cancel: function() {
-                            dialog.dialog( "close" );
-                        }
-                    },
-                    close: function() {
-                        form[ 0 ].reset();
-                    }
-                });
-                dialog.open('open');
+                dialog.dialog('open');
             }
         };
         var userTable = $('#user-table').DataTable({
@@ -26,7 +35,7 @@
                 'colvis',
                 'excel',
                 'print',
-                'custom'
+                'create'
             ],
             'processing': true,
             'serverSide': true,
