@@ -3,16 +3,14 @@ package me.smartstart.app.controller
 import me.smartstart.app.util.JsonUtil
 import me.smartstart.app.vo.DataTableParams
 import me.smartstart.app.vo.DataTableResult
+import me.smartstart.app.vo.RoleCommand
 import me.smartstart.app.vo.UserCommand
 import me.smartstart.core.domain.Role
 import me.smartstart.core.domain.User
-import me.smartstart.core.repository.UserRepository
-import org.hibernate.validator.constraints.Email
-import org.hibernate.validator.constraints.NotEmpty
+import me.smartstart.core.service.UserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -38,7 +36,7 @@ class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController)
 
     @Autowired
-    UserRepository userRepository
+    UserService userService
 
     // index view
     // Role and Authority are the same, hasRole and hasAuthority are the same as well.
@@ -48,7 +46,12 @@ class UserController {
     @PreAuthorize("hasPermission('', 'manageUser')")
     // permission based
     @GetMapping('/index')
-    String index() {
+    String index(Model model) {
+        List<RoleCommand> commands = new ArrayList<>()
+        userService.getAllRoles().each {
+            commands.add(new RoleCommand(it))
+        }
+        model.addAttribute('roles', commands)
         return 'user/index'
     }
 
@@ -86,7 +89,7 @@ class UserController {
             }
         }
 
-        Page<User> page = userRepository.findAll(specification, pageable)
+        Page<User> page = userService.findUsers(specification, pageable)
 
         DataTableResult<UserCommand> result = new DataTableResult<>(params)
         List<UserCommand> userCommands = new ArrayList<>()
@@ -95,7 +98,7 @@ class UserController {
         }
         result.data = userCommands
         result.recordsTotal = page.totalElements
-        result.recordsFiltered = userRepository.count(specification)
+        result.recordsFiltered = userService.countUser(specification)
 
         JsonUtil.toJson(result)
     }

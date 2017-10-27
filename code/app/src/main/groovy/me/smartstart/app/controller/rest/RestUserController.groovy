@@ -6,6 +6,7 @@ import me.smartstart.app.vo.DataTableResult
 import me.smartstart.app.vo.UserCommand
 import me.smartstart.core.domain.User
 import me.smartstart.core.repository.UserRepository
+import me.smartstart.core.service.UserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,7 +34,7 @@ class RestUserController {
     private static final Logger logger = LoggerFactory.getLogger(RestUserController)
 
     @Autowired
-    UserRepository userRepository
+    UserService userService
 
     
 }

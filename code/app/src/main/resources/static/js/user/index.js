@@ -1,32 +1,43 @@
 (function ($) {
     $(function () {
 
-        var dialog, form;
+        var dialog, form, userTable;
 
-        dialog = $( "#user-dialog" ).dialog({
+        dialog = $("#user-dialog").dialog({
             autoOpen: false,
-            height: 400,
+            height: 550,
             width: 400,
             modal: true,
             buttons: {
-                'Create a user': function() {},
-                'Cancel': function() {
-                    dialog.dialog( "close" );
+                'Create a user': function () {
+                },
+                'Cancel': function () {
+                    dialog.dialog("close");
                 }
             },
-            close: function() {
+            close: function () {
                 form[0].reset();
             }
         });
 
-        form = dialog.find( "form" ).on( "submit", function( event ) {
+        form = dialog.find("form").on("submit", function (event) {
             event.preventDefault();
         });
+
+        // function to get selected row data and put into the dialog
+        function populateDialog() {
+            var user = userTable.rows({selected: true}).data()[0];
+            $('#username').val(user.username);
+            $('#firstName').val(user.firstName);
+            $('#lastName').val(user.lastName);
+            $('#description').val(user.description);
+        }
 
         $.fn.dataTable.ext.buttons.create = {
             className: 'btn-create',
             text: 'Create',
             action: function () {
+                dialog.dialog('option', 'title', 'Create User');
                 dialog.dialog('open');
             }
         };
@@ -34,18 +45,26 @@
             className: 'btn-edit',
             text: 'Edit',
             action: function () {
+                dialog.dialog('option', 'title', 'Edit User');
                 dialog.dialog('open');
+                populateDialog();
             }
         };
         $.fn.dataTable.ext.buttons.delete = {
             className: 'btn-delete',
             text: 'Delete',
             action: function () {
+                dialog.dialog('option', 'title', 'Delete User');
                 dialog.dialog('open');
+                populateDialog();
+                $('#username').prop('disabled', true);
             }
         };
 
-        var userTable = $('#user-table').DataTable({
+        userTable = $('#user-table').DataTable({
+            language: {
+                url: '/table/lang'
+            },
             dom: 'lBfrtip',
             buttons: [
                 'create',
@@ -87,19 +106,19 @@
         userTable.buttons('.btn-edit').disable();
         userTable.buttons('.btn-delete').disable();
         userTable
-            .on( 'select', function ( e, dt, type, indexes ) {
-                var rowData = userTable.rows( indexes ).data().toArray();
-                console.log( '<div><b>'+type+' selection</b> - '+JSON.stringify( rowData )+'</div>' );
+            .on('select', function (e, dt, type, indexes) {
+                var rowData = userTable.rows(indexes).data().toArray();
+                console.log('<div><b>' + type + ' selection</b> - ' + JSON.stringify(rowData) + '</div>');
                 // userTable.buttons([1,2]).enable();
                 userTable.buttons('.btn-edit').enable();
                 userTable.buttons('.btn-delete').enable();
-            } )
-            .on( 'deselect', function ( e, dt, type, indexes ) {
-                var rowData = userTable.rows( indexes ).data().toArray();
-                console.log( '<div><b>'+type+' <i>de</i>selection</b> - '+JSON.stringify( rowData )+'</div>' );
+            })
+            .on('deselect', function (e, dt, type, indexes) {
+                var rowData = userTable.rows(indexes).data().toArray();
+                console.log('<div><b>' + type + ' <i>de</i>selection</b> - ' + JSON.stringify(rowData) + '</div>');
                 // userTable.buttons([1,2]).disable();
                 userTable.buttons('.btn-edit').disable();
                 userTable.buttons('.btn-delete').disable();
-            } );
+            });
     });
 })(jQuery);

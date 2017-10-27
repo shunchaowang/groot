@@ -9,6 +9,7 @@ import me.smartstart.core.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -62,7 +63,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    Long countAllUser() {
+    Long countUser() {
         userRepository.count()
     }
 
@@ -74,8 +75,14 @@ class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    Page<User> findUsers(Pageable pageable) {
-        userRepository.findAll(pageable)
+    Page<User> findUsers(Specification<User> specification, Pageable pageable) {
+        userRepository.findAll(specification, pageable)
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    long countUser(Specification<User> specification) {
+        return userRepository.count(specification)
     }
 
     @Override
@@ -106,5 +113,11 @@ class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     Page<Role> findRoles(Pageable pageable) {
         roleRepository.findAll(pageable)
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    List<Role> getAllRoles() {
+        return roleRepository.findAll()
     }
 }
