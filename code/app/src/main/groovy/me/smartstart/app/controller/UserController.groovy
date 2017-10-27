@@ -30,7 +30,6 @@ import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.Predicate
 import javax.persistence.criteria.Root
 import javax.servlet.http.HttpServletRequest
-import java.text.DateFormat
 
 @Controller
 @RequestMapping('/user')
@@ -49,8 +48,7 @@ class UserController {
     @PreAuthorize("hasPermission('', 'manageUser')")
     // permission based
     @GetMapping('/index')
-    String index(Model model) {
-        model.addAttribute('userCommand', new UserCommand())
+    String index() {
         return 'user/index'
     }
 
