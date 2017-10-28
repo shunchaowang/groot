@@ -26,6 +26,14 @@
         th:href="@{/vendors/DataTables/Responsive-2.2.0/css/responsive.bootstrap.min.css}"/>
 
     <link rel="stylesheet" href="../../static/css/app.css" th:href="@{/css/app.css}"/>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        var tableLangUrl = /*[[@{/table/lang}]]*/ '/table/lang';
+
+        /*]]>*/
+    </script>
 </head>
 
 <body class="container">

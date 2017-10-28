@@ -42,7 +42,7 @@
             }
         };
         $.fn.dataTable.ext.buttons.edit = {
-            className: 'btn-edit',
+            className: 'btn-edit disabled',
             text: 'Edit',
             action: function () {
                 dialog.dialog('option', 'title', 'Edit User');
@@ -51,7 +51,7 @@
             }
         };
         $.fn.dataTable.ext.buttons.delete = {
-            className: 'btn-delete',
+            className: 'btn-delete disabled',
             text: 'Delete',
             action: function () {
                 dialog.dialog('option', 'title', 'Delete User');
@@ -63,7 +63,7 @@
 
         userTable = $('#user-table').DataTable({
             language: {
-                url: '/table/lang'
+                url: tableLangUrl
             },
             dom: 'lBfrtip',
             buttons: [
@@ -101,10 +101,13 @@
             ]
         });
 
+        /**
+         * because language.url is an ajax call, the table is initialized async, cannot set button options here.
+         * */
         // userTable.buttons([1,2]).disable(); // select multi buttons by index array
         // userTable.button(1).disable(); // select single button by index
-        userTable.buttons('.btn-edit').disable();
-        userTable.buttons('.btn-delete').disable();
+        // userTable.buttons('.btn-edit').disable();
+        // userTable.buttons('.btn-delete').disable();
         userTable
             .on('select', function (e, dt, type, indexes) {
                 var rowData = userTable.rows(indexes).data().toArray();
