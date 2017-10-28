@@ -1,34 +1,19 @@
 package me.smartstart.app.controller.rest
 
-import me.smartstart.app.util.JsonUtil
-import me.smartstart.app.vo.DataTableParams
-import me.smartstart.app.vo.DataTableResult
 import me.smartstart.app.vo.JsonResponse
 import me.smartstart.app.vo.UserCommand
+import me.smartstart.core.domain.Role
 import me.smartstart.core.domain.User
-import me.smartstart.core.repository.UserRepository
 import me.smartstart.core.service.UserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
-import org.springframework.data.jpa.domain.Specification
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-import javax.persistence.criteria.CriteriaBuilder
-import javax.persistence.criteria.CriteriaQuery
-import javax.persistence.criteria.Predicate
-import javax.persistence.criteria.Root
-import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
 
 @RestController
@@ -44,9 +29,33 @@ class RestUserController {
     @PostMapping('/save')
     JsonResponse save(@Valid @RequestBody UserCommand userCommand, BindingResult bindingResult) {
 
-
         JsonResponse response = new JsonResponse()
 
+        if (bindingResult.hasErrors()) {
+            response.status = 'failed'
+            response.data = bindingResult.allErrors
+            return JsonResponse
+        }
+
+        def user = userService.saveUser(toUser(userCommand))
+        response.status = 'successful'
+        response.data = user
+
         response
+    }
+
+    private User toUser(UserCommand userCommand) {
+        User user = new User(username: userCommand.username, firstName: userCommand.firstName,
+                lastName: userCommand.lastName, description: userCommand.description)
+
+        user.dateCreated = new Date()
+
+        user.roles = new HashSet<>()
+        userCommand.roles?.each {
+            Role role = userService.getRole(it.id)
+            user.roles.add(role)
+        }
+
+        user
     }
 }

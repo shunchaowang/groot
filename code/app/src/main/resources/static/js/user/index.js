@@ -1,6 +1,20 @@
 (function ($) {
     $(function () {
 
+        function editTable(action) {
+
+            switch (action) {
+                case 'create':
+                    break;
+                case 'edit':
+                    break;
+                case 'delete':
+                    break;
+                default:
+                    break;
+            }
+        }
+
         var dialog, form, userTable;
 
         dialog = $("#user-dialog").dialog({
@@ -11,7 +25,9 @@
             buttons: [{
                 id: 'action-button',
                 text: 'Create User',
-                click: function() {}
+                click: function() {
+                    editTable('create');
+                }
             }, {
                 text: 'Cancel',
                 click: function () {

@@ -100,6 +100,8 @@ class UserController {
         result.recordsTotal = page.totalElements
         result.recordsFiltered = userService.countUser(specification)
 
+        logger.debug("datatable result: ${JsonUtil.toJson(result)}")
+
         JsonUtil.toJson(result)
     }
 }
