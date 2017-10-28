@@ -3,6 +3,7 @@ package me.smartstart.app.controller.rest
 import me.smartstart.app.util.JsonUtil
 import me.smartstart.app.vo.DataTableParams
 import me.smartstart.app.vo.DataTableResult
+import me.smartstart.app.vo.JsonResponse
 import me.smartstart.app.vo.UserCommand
 import me.smartstart.core.domain.User
 import me.smartstart.core.repository.UserRepository
@@ -16,7 +17,10 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -25,6 +29,7 @@ import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.Predicate
 import javax.persistence.criteria.Root
 import javax.servlet.http.HttpServletRequest
+import javax.validation.Valid
 
 @RestController
 @RequestMapping('/rest/user')
@@ -36,5 +41,12 @@ class RestUserController {
     @Autowired
     UserService userService
 
-    
+    @PostMapping('/save')
+    JsonResponse save(@Valid @RequestBody UserCommand userCommand, BindingResult bindingResult) {
+
+
+        JsonResponse response = new JsonResponse()
+
+        response
+    }
 }

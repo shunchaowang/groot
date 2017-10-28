@@ -20,7 +20,7 @@ class UserCommand {
     String dateCreated
     String lastUpdated
 
-    Set<RoleCommand> roles
+    List<RoleCommand> roles
 
     UserCommand() {}
 
@@ -37,7 +37,7 @@ class UserCommand {
             lastUpdated = dateFormat.format(user.lastUpdated)
         }
 
-        roles = new HashSet<>()
+        roles = new ArrayList<>()
         user.roles?.each {
             RoleCommand role = new RoleCommand(it)
             roles.add(role)

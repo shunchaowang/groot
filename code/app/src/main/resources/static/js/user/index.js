@@ -8,13 +8,16 @@
             height: 550,
             width: 400,
             modal: true,
-            buttons: {
-                'Create a user': function () {
-                },
-                'Cancel': function () {
-                    dialog.dialog("close");
+            buttons: [{
+                id: 'action-button',
+                text: 'Create User',
+                click: function() {}
+            }, {
+                text: 'Cancel',
+                click: function () {
+                    $(this).dialog('close');
                 }
-            },
+            }],
             close: function () {
                 form[0].reset();
             }
@@ -46,6 +49,7 @@
             text: 'Edit',
             action: function () {
                 dialog.dialog('option', 'title', 'Edit User');
+                $('#action-button').button('option', 'label', 'Update User');
                 dialog.dialog('open');
                 populateDialog();
             }
@@ -55,6 +59,7 @@
             text: 'Delete',
             action: function () {
                 dialog.dialog('option', 'title', 'Delete User');
+                $('#action-button').button('option', 'label', 'Delete User');
                 dialog.dialog('open');
                 populateDialog();
                 $('#username').prop('disabled', true);
