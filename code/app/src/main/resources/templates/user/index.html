@@ -30,7 +30,7 @@
             </li>
         </ol>
     </div>
-    <div th:text="${#locale}">Locale</div>
+    
     <div class="row">
         <div class="col-sm-12">
             <table class="table table-bordered" id="user-table">
@@ -80,13 +80,13 @@
                     <span th:text="#{role.label}">Role</span>
                     <span class="required-indicator">*</span>
                 </label>
-                    <ul id="role">
-                        <li th:each="role: ${roles}">
-                            <input type="checkbox" th:value="${role.id}"/>
-                            <label><span th:text="#{__${role.name}__.label}">Role</span></label>
-                            <!--<label th:for="${#ids.prev('roles')}">${role.name}</label>-->
-                        </li>
-                    </ul>
+                <ul id="role">
+                    <li th:each="role: ${roles}">
+                        <input type="checkbox" th:value="${role.id}"/>
+                        <label><span th:text="#{__${role.name}__.label}">Role</span></label>
+                        <!--<label th:for="${#ids.prev('roles')}">${role.name}</label>-->
+                    </li>
+                </ul>
             </div>
 
             <div class="input-group">

@@ -42,7 +42,7 @@
             }
         };
         $.fn.dataTable.ext.buttons.edit = {
-            className: 'btn-edit disabled',
+            className: 'btn-edit',
             text: 'Edit',
             action: function () {
                 dialog.dialog('option', 'title', 'Edit User');
@@ -51,7 +51,7 @@
             }
         };
         $.fn.dataTable.ext.buttons.delete = {
-            className: 'btn-delete disabled',
+            className: 'btn-delete',
             text: 'Delete',
             action: function () {
                 dialog.dialog('option', 'title', 'Delete User');
@@ -62,6 +62,11 @@
         };
 
         userTable = $('#user-table').DataTable({
+            initComplete: function() {
+                var api = this.api();
+                api.buttons('.btn-edit').disable();
+                api.buttons('.btn-delete').disable();
+            },
             language: {
                 url: tableLangUrl
             },
@@ -103,6 +108,7 @@
 
         /**
          * because language.url is an ajax call, the table is initialized async, cannot set button options here.
+         * have to use initComplete callback.
          * */
         // userTable.buttons([1,2]).disable(); // select multi buttons by index array
         // userTable.button(1).disable(); // select single button by index
