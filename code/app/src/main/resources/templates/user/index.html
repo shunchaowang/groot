@@ -30,7 +30,7 @@
             </li>
         </ol>
     </div>
-    
+
     <div class="row">
         <div class="col-sm-12">
             <table class="table table-bordered" id="user-table">
@@ -51,7 +51,9 @@
     </div>
     <!--create/edit user dialog-->
     <div id="user-dialog" style="display:none;">
-        <form action="/user/create" method="POST" class="form-horizontal" id="create-form" th:action="@{/user/create}">
+        <form action="/user/save" method="POST" class="form-horizontal" id="user-form"
+              th:action="@{/rest/user/save}">
+            <input type="hidden" id="id"/>
             <div class="input-group">
                 <label for="username">
                     <span th:text="#{username.label}">Username</span>

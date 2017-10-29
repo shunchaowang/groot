@@ -2,6 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
+    <meta name="description" content="Spring Boot, Spring Security and Thymeleaf" />
+    <meta name="_csrf_parameter" th:content="_csrf" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <meta charset="UTF-8"/>
     <title>Smart Boot Web Application</title>
 

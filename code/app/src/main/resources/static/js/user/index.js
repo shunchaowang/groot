@@ -1,10 +1,63 @@
 (function ($) {
     $(function () {
 
+        // crsf
+        // var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
+        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+
+        var headers = {};
+        headers[csrfHeader] = csrfToken;
+
+        var dialog, form, userTable;
+
+        function createUser() {
+            // $('#user-form').submit(function (event) {
+            //     event.preventDefault();
+
+            // get roles
+            var roles = [];
+            $('#role :checked').each(function () {
+                roles.push({id: $(this).val()});
+            });
+            console.log("roles: " + roles);
+            var formData = {
+                username: $('#username').val(), firstName: $('#firstName').val(),
+                lastName: $('#lastName').val(), description: $('#description').val(), roles: roles,
+            }
+
+            $.ajax({
+                type: 'post',
+                url: '/rest/user/save',
+                headers: headers,
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(formData),
+                success: function (result) {
+                    // console.log("post status: " + result.status);
+                    dialog.dialog('close');
+                    userTable.draw();
+                },
+                error: function (e) {
+                    alert("Error: " + e);
+                }
+            });
+            // });
+        }
+
+        function editUser() {
+
+        }
+
+        function deleteUser() {
+
+        }
+
         function editTable(action) {
 
             switch (action) {
                 case 'create':
+                    createUser();
                     break;
                 case 'edit':
                     break;
@@ -15,8 +68,6 @@
             }
         }
 
-        var dialog, form, userTable;
-
         dialog = $("#user-dialog").dialog({
             autoOpen: false,
             height: 550,
@@ -25,7 +76,7 @@
             buttons: [{
                 id: 'action-button',
                 text: 'Create User',
-                click: function() {
+                click: function () {
                     editTable('create');
                 }
             }, {
@@ -46,6 +97,7 @@
         // function to get selected row data and put into the dialog
         function populateDialog() {
             var user = userTable.rows({selected: true}).data()[0];
+            $('#id').val(user.id);
             $('#username').val(user.username);
             $('#firstName').val(user.firstName);
             $('#lastName').val(user.lastName);
@@ -83,7 +135,7 @@
         };
 
         userTable = $('#user-table').DataTable({
-            initComplete: function() {
+            initComplete: function () {
                 var api = this.api();
                 api.buttons('.btn-edit').disable();
                 api.buttons('.btn-delete').disable();
@@ -96,10 +148,13 @@
                 'create',
                 'edit',
                 'delete',
-                'colvis',
                 'excel',
                 'print',
-                'pdf'
+                'pdf',
+                {
+                    extend: 'colvis',
+                    columns: ':gt(0)'
+                }
             ],
             responsive: true,
             select: true,
