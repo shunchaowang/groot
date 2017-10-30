@@ -51,6 +51,12 @@ class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    void deleteUser(long id) {
+        userRepository.delete(id)
+    }
+
+    @Override
+    @Transactional
     User activateUser(long id) {
         return null
     }

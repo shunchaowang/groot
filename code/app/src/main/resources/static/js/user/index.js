@@ -9,9 +9,12 @@
         var headers = {};
         headers[csrfHeader] = csrfToken;
 
-        var dialog, form, userTable;
+        var dialog, form, userTable, action; // action create, edit and delete
 
-        function saveUser(update) {
+        /*
+        * update user when update is true, otherwise create a new one
+        * */
+        function createUser() {
 
             // get roles
             var roles = [];
@@ -24,13 +27,9 @@
                 lastName: $('#lastName').val(), description: $('#description').val(), roles: roles
             };
 
-            if (update) {
-                formData['id'] = $('#id').val();
-            }
-
             $.ajax({
                 type: 'post',
-                url: '/rest/user/save',
+                url: '/rest/user/create',
                 headers: headers,
                 contentType: 'application/json',
                 dataType: 'json',
@@ -45,24 +44,69 @@
             });
         }
 
-        function editUser() {
+        /*
+       * update user when update is true, otherwise create a new one
+       * */
+        function updateUser() {
 
+            // get roles
+            var roles = [];
+            $('#role :checked').each(function () {
+                roles.push({id: $(this).val()});
+            });
+
+            var formData = {id: $('#id').val(),
+                username: $('#username').val(), firstName: $('#firstName').val(),
+                lastName: $('#lastName').val(), description: $('#description').val(), roles: roles
+            };
+
+            $.ajax({
+                type: 'put',
+                url: '/rest/user/update',
+                headers: headers,
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(formData),
+                success: function (result) {
+                    dialog.dialog('close');
+                    userTable.draw();
+                },
+                error: function (e) {
+                    alert("Error: " + e);
+                }
+            });
         }
+
 
         function deleteUser() {
+            var id = $('#id').val();
 
+            $.ajax({
+                type: 'delete',
+                url: '/rest/user/delete/' + id,
+                headers: headers,
+                dataType: 'json',
+                success: function (result) {
+                    dialog.dialog('close');
+                    userTable.draw();
+                },
+                error: function (e) {
+                    alert("Error: " + e);
+                }
+            });
         }
 
-        function editTable(action) {
+        function editTable() {
 
             switch (action) {
                 case 'create':
-                    saveUser(false);
+                    createUser();
                     break;
                 case 'edit':
-                    saveUser(true);
+                    updateUser();
                     break;
                 case 'delete':
+                    deleteUser();
                     break;
                 default:
                     break;
@@ -78,7 +122,7 @@
                 id: 'action-button',
                 text: 'Create User',
                 click: function () {
-                    editTable('create');
+                    editTable();
                 }
             }, {
                 text: 'Cancel',
@@ -103,6 +147,16 @@
             $('#firstName').val(user.firstName);
             $('#lastName').val(user.lastName);
             $('#description').val(user.description);
+            var roleIds = [];
+            $.each(user.roles, function (index, value) {
+                roleIds.push(value.id);
+            });
+
+            $('#role :checkbox').each(function (index, value) {
+                if (roleIds.indexOf(parseInt($(this).val())) >= 0) {
+                    $(this).prop('checked', true);
+                }
+            });
         }
 
         $.fn.dataTable.ext.buttons.create = {
@@ -111,6 +165,7 @@
             action: function () {
                 dialog.dialog('option', 'title', 'Create User');
                 dialog.dialog('open');
+                action = 'create';
             }
         };
         $.fn.dataTable.ext.buttons.edit = {
@@ -119,7 +174,9 @@
             action: function () {
                 dialog.dialog('option', 'title', 'Edit User');
                 $('#action-button').button('option', 'label', 'Update User');
+                $('#action-button').button('option', 'click', 'updateUser');
                 dialog.dialog('open');
+                action = 'edit';
                 populateDialog();
             }
         };
@@ -131,6 +188,7 @@
                 $('#action-button').button('option', 'label', 'Delete User');
                 dialog.dialog('open');
                 populateDialog();
+                action = 'delete';
                 $('#username').prop('disabled', true);
             }
         };

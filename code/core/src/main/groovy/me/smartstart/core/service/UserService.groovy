@@ -18,6 +18,8 @@ interface UserService {
 
     User updateUser(User user)
 
+    void deleteUser(long id)
+
     User activateUser(long id)
 
     User deactivateUser(long id)

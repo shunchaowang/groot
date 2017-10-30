@@ -10,9 +10,13 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 import javax.validation.Valid
@@ -30,8 +34,8 @@ class RestUserController {
     @Autowired
     BCryptPasswordEncoder passwordEncoder
 
-    @PostMapping('/save')
-    RestResponse save(@Valid @RequestBody UserCommand userCommand, BindingResult bindingResult) {
+    @PutMapping('/update')
+    RestResponse update(@Valid @RequestBody UserCommand userCommand, BindingResult bindingResult) {
 
         RestResponse response = new RestResponse()
 
@@ -48,22 +52,59 @@ class RestUserController {
         response
     }
 
-    private User toUser(UserCommand userCommand) {
-        User user = new User(username: userCommand.username, firstName: userCommand.firstName,
-                lastName: userCommand.lastName, description: userCommand.description)
 
-        user.roles = new HashSet<>()
-        userCommand.roles?.each {
-            Role role = userService.getRole(it.id)
-            user.roles.add(role)
+    @PostMapping('/create')
+    RestResponse create(@Valid @RequestBody UserCommand userCommand, BindingResult bindingResult) {
+
+        RestResponse response = new RestResponse()
+
+        if (bindingResult.hasErrors()) {
+            response.status = 'failed'
+            response.data = bindingResult.allErrors
+            return RestResponse
         }
 
-        if (userCommand.id) {
-            user.id = userCommand.id // it's updating
-        } else {
+        def user = userService.saveUser(toUser(userCommand))
+        response.status = 'successful'
+        response.data = new UserCommand(user)
+
+        response
+    }
+
+    @DeleteMapping('/delete/{id}')
+    RestResponse delete(@PathVariable long id) {
+        userService.deleteUser(id)
+        new RestResponse(status: 'successful')
+    }
+
+    private User toUser(UserCommand userCommand) {
+
+        User user
+
+        if (userCommand.id) { // updating
+            user = userService.getUser(userCommand.id)
+            user.lastUpdated = new Date()
+            user.roles.clear()
+
+        } else { //creating
+
+            user = new User()
+            user.roles = new HashSet<>()
             user.dateCreated = new Date()
             user.password = passwordEncoder.encode('password')
             user.active = true
+        }
+
+        user.with {
+            username = userCommand.username
+            firstName = userCommand.firstName
+            lastName = userCommand.lastName
+            description = userCommand.description
+        }
+
+        userCommand.roles?.each {
+            Role role = userService.getRole(it.id)
+            user.roles.add(role)
         }
 
         user
