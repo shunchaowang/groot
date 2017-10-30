@@ -52,14 +52,18 @@ class RestUserController {
         User user = new User(username: userCommand.username, firstName: userCommand.firstName,
                 lastName: userCommand.lastName, description: userCommand.description)
 
-        user.dateCreated = new Date()
-        user.password = passwordEncoder.encode('password')
-        user.active = true
-
         user.roles = new HashSet<>()
         userCommand.roles?.each {
             Role role = userService.getRole(it.id)
             user.roles.add(role)
+        }
+
+        if (userCommand.id) {
+            user.id = userCommand.id // it's updating
+        } else {
+            user.dateCreated = new Date()
+            user.password = passwordEncoder.encode('password')
+            user.active = true
         }
 
         user

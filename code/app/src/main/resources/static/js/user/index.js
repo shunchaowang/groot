@@ -11,19 +11,21 @@
 
         var dialog, form, userTable;
 
-        function createUser() {
-            // $('#user-form').submit(function (event) {
-            //     event.preventDefault();
+        function saveUser(update) {
 
             // get roles
             var roles = [];
             $('#role :checked').each(function () {
                 roles.push({id: $(this).val()});
             });
-            console.log("roles: " + roles);
+
             var formData = {
                 username: $('#username').val(), firstName: $('#firstName').val(),
-                lastName: $('#lastName').val(), description: $('#description').val(), roles: roles,
+                lastName: $('#lastName').val(), description: $('#description').val(), roles: roles
+            };
+
+            if (update) {
+                formData['id'] = $('#id').val();
             }
 
             $.ajax({
@@ -34,7 +36,6 @@
                 dataType: 'json',
                 data: JSON.stringify(formData),
                 success: function (result) {
-                    // console.log("post status: " + result.status);
                     dialog.dialog('close');
                     userTable.draw();
                 },
@@ -42,7 +43,6 @@
                     alert("Error: " + e);
                 }
             });
-            // });
         }
 
         function editUser() {
@@ -57,9 +57,10 @@
 
             switch (action) {
                 case 'create':
-                    createUser();
+                    saveUser(false);
                     break;
                 case 'edit':
+                    saveUser(true);
                     break;
                 case 'delete':
                     break;
