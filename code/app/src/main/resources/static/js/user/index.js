@@ -9,7 +9,8 @@
         var headers = {};
         headers[csrfHeader] = csrfToken;
 
-        var dialog, form, userTable, action; // action create, edit and delete
+        var dialog, form, userTable, action; // action create, edit and delete, initialized with empty
+        var highlight = 0;
 
         /*
         * update user when update is true, otherwise create a new one
@@ -35,8 +36,22 @@
                 dataType: 'json',
                 data: JSON.stringify(formData),
                 success: function (result) {
-                    dialog.dialog('close');
-                    userTable.draw();
+                    if (result.status == 'successful') {
+                        dialog.dialog('close');
+                        // set highlight value to be the id of created user
+                        highlight = result.data.id;
+                        userTable.draw();
+                    } else if (result.status == 'error') {
+                        $.each(result.data, function (index, value) {
+                            $('#errors').append(
+                                $('<li/>').text(value.field + value.defaultMessage)
+                            );
+                        });
+
+                        setTimeout(function () {
+                            $('#errors').empty();
+                        }, 5000);
+                    }
                 },
                 error: function (e) {
                     alert("Error: " + e);
@@ -55,7 +70,8 @@
                 roles.push({id: $(this).val()});
             });
 
-            var formData = {id: $('#id').val(),
+            var formData = {
+                id: $('#id').val(),
                 username: $('#username').val(), firstName: $('#firstName').val(),
                 lastName: $('#lastName').val(), description: $('#description').val(), roles: roles
             };
@@ -68,8 +84,22 @@
                 dataType: 'json',
                 data: JSON.stringify(formData),
                 success: function (result) {
-                    dialog.dialog('close');
-                    userTable.draw();
+                    if (result.status == 'successful') {
+                        dialog.dialog('close');
+                        // set highlight value to be the id of created user
+                        highlight = result.data.id;
+                        userTable.draw();
+                    } else if (result.status == 'error') {
+                        $.each(result.data, function (index, value) {
+                            $('#errors').append(
+                                $('<li/>').text(value.field + value.defaultMessage)
+                            );
+                        });
+
+                        setTimeout(function () {
+                            $('#errors').empty();
+                        }, 5000);
+                    }
                 },
                 error: function (e) {
                     alert("Error: " + e);
@@ -115,8 +145,8 @@
 
         dialog = $("#user-dialog").dialog({
             autoOpen: false,
-            height: 550,
-            width: 400,
+            height: 'auto',
+            width: 'auto',
             modal: true,
             buttons: [{
                 id: 'action-button',
@@ -132,6 +162,7 @@
             }],
             close: function () {
                 form[0].reset();
+                $('#errors').empty();
             }
         });
 
@@ -199,6 +230,19 @@
                 api.buttons('.btn-edit').disable();
                 api.buttons('.btn-delete').disable();
             },
+
+            createdRow: function (row, data, index) {
+                if (data.id == highlight) {
+                    $(row).addClass('highlight');
+                    // reset highlight
+                    highlight = 0;
+                }
+                // reset background color to normal after 5 sec
+                setTimeout(function () {
+                    $(row).removeClass('highlight');
+                }, 5000);
+            },
+
             language: {
                 url: tableLangUrl
             },

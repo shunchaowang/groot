@@ -17,3 +17,7 @@ body {
     text-align: center;
     padding-top: 8px;
 }
+
+.highlight {
+    background-color: PaleGreen !important;
+}

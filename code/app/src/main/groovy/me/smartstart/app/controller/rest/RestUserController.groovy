@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 import javax.validation.Valid
@@ -37,38 +36,25 @@ class RestUserController {
     @PutMapping('/update')
     RestResponse update(@Valid @RequestBody UserCommand userCommand, BindingResult bindingResult) {
 
-        RestResponse response = new RestResponse()
-
         if (bindingResult.hasErrors()) {
-            response.status = 'failed'
-            response.data = bindingResult.allErrors
-            return RestResponse
+            return new RestResponse(status: 'error', data: bindingResult.allErrors)
         }
 
         def user = userService.saveUser(toUser(userCommand))
-        response.status = 'successful'
-        response.data = new UserCommand(user)
 
-        response
+        new RestResponse(status: 'successful', data: new UserCommand(user))
     }
 
 
     @PostMapping('/create')
     RestResponse create(@Valid @RequestBody UserCommand userCommand, BindingResult bindingResult) {
 
-        RestResponse response = new RestResponse()
-
         if (bindingResult.hasErrors()) {
-            response.status = 'failed'
-            response.data = bindingResult.allErrors
-            return RestResponse
+            return new RestResponse(status: 'error', data: bindingResult.allErrors)
         }
 
         def user = userService.saveUser(toUser(userCommand))
-        response.status = 'successful'
-        response.data = new UserCommand(user)
-
-        response
+        new RestResponse(status: 'successful', data: new UserCommand(user))
     }
 
     @DeleteMapping('/delete/{id}')
