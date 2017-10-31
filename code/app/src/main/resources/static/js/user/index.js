@@ -225,7 +225,8 @@
         };
 
         userTable = $('#user-table').DataTable({
-            initComplete: function () {
+            drawCallback: function () {
+                // drawCallback is called first whenever initComplete is called.
                 var api = this.api();
                 api.buttons('.btn-edit').disable();
                 api.buttons('.btn-delete').disable();
