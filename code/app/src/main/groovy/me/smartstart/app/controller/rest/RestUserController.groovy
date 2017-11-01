@@ -59,8 +59,9 @@ class RestUserController {
 
     @DeleteMapping('/delete/{id}')
     RestResponse delete(@PathVariable long id) {
+        User user = userService.getUser(id)
         userService.deleteUser(id)
-        new RestResponse(status: 'successful')
+        new RestResponse(status: 'successful', data: user.username)
     }
 
     private User toUser(UserCommand userCommand) {

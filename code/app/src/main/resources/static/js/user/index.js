@@ -41,6 +41,12 @@
                         // set highlight value to be the id of created user
                         highlight = result.data.id;
                         userTable.draw();
+                        $('#notification')
+                            .append($('<div/>', {id: 'alert', class: 'alert alert-success text-center'})
+                                .text(result.data.username + ' Created'));
+                        $('#alert').fadeOut(8000, function () {
+                            $(this).remove();
+                        });
                     } else if (result.status == 'error') {
                         $.each(result.data, function (index, value) {
                             $('#errors').append(
@@ -50,7 +56,7 @@
 
                         setTimeout(function () {
                             $('#errors').empty();
-                        }, 5000);
+                        }, 10000);
                     }
                 },
                 error: function (e) {
@@ -89,6 +95,12 @@
                         // set highlight value to be the id of created user
                         highlight = result.data.id;
                         userTable.draw();
+                        $('#notification')
+                            .append($('<div/>', {id: 'alert', class: 'alert alert-info text-center'})
+                                .text(result.data.username + ' Updated'));
+                        $('#alert').fadeOut(8000, function () {
+                            $(this).remove();
+                        });
                     } else if (result.status == 'error') {
                         $.each(result.data, function (index, value) {
                             $('#errors').append(
@@ -98,7 +110,7 @@
 
                         setTimeout(function () {
                             $('#errors').empty();
-                        }, 5000);
+                        }, 10000);
                     }
                 },
                 error: function (e) {
@@ -119,6 +131,12 @@
                 success: function (result) {
                     dialog.dialog('close');
                     userTable.draw();
+                    $('#notification')
+                        .append($('<div/>', {id: 'alert', class: 'alert alert-warning text-center'})
+                            .text(result.data + ' Deleted'));
+                    $('#alert').fadeOut(8000, function () {
+                        $(this).remove();
+                    });
                 },
                 error: function (e) {
                     alert("Error: " + e);
@@ -241,7 +259,7 @@
                 // reset background color to normal after 5 sec
                 setTimeout(function () {
                     $(row).removeClass('highlight');
-                }, 5000);
+                }, 10000);
             },
 
             language: {
