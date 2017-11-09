@@ -24,5 +24,5 @@ unit.
 - Groovy
 > Best scripting language runs on JVM, save more typings than Java.
 # Releases
-# Tasks
-# Notes
+- 0.0.1-SNAPSHOT
+> kick off the idea
