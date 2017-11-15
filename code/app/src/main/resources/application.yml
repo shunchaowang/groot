@@ -1,8 +1,13 @@
-# dev for development, prod for production, comment it out to use default to run with H2 database
+# dev for development, prod for production, default to run with H2 database
 spring:
   profiles:
-    active: dev
+    active: default
 
+logging:
+  level:
+    ROOT: ERROR
+    me.smartstart.app: DEBUG
+    me.smartstart.core: DEBUG
 ---
 spring:
   profiles: dev
