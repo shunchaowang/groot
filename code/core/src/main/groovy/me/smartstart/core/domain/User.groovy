@@ -38,6 +38,7 @@ class User {
     @Column(nullable = false)
     boolean active
 
+    // JoinTable makes User is the owner of the relationship to Role
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = 'user_role_mapping',
             joinColumns = @JoinColumn(name = 'user_id'),
@@ -45,6 +46,7 @@ class User {
     )
     Set<Role> roles
 
+    // JoinTable makes User is the owner of the relationship to Permission
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = 'user_permission_mapping',
             joinColumns = @JoinColumn(name = 'user_id'),

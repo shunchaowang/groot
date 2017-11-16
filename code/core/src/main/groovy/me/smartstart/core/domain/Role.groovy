@@ -18,6 +18,7 @@ class Role {
     @Column(nullable = false)
     boolean active
 
+    // JoinTable makes Role is the owner of the relationship to Permission
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = 'role_permission_mapping',
             joinColumns = @JoinColumn(name = 'role_id'),
@@ -25,6 +26,6 @@ class Role {
     )
     Set<Permission> permissions
 
-    @ManyToMany
+    @ManyToMany(mappedBy = 'roles')
     Set<User> user
 }

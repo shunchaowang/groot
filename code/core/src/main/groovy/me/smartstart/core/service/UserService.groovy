@@ -35,6 +35,8 @@ interface UserService {
     long countUser(Specification<User> specification)
 
     // Permission apis
+    Permission savePermission(Permission permission)
+
     Permission getPermission(long id)
 
     Permission findPermissionByName(String name)
@@ -42,6 +44,7 @@ interface UserService {
     Page<Permission> findPermissions(Pageable pageable)
 
     // Role apis
+    Role saveRole(Role role)
 
     Role getRole(long id)
 

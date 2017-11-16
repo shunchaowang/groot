@@ -92,6 +92,12 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    Permission savePermission(Permission permission) {
+        return permissionRepository.save(permission)
+    }
+
+    @Override
     @Transactional(readOnly = true)
     Permission getPermission(long id) {
         permissionRepository.findOne(id)
@@ -101,6 +107,12 @@ class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     Page<Permission> findPermissions(Pageable pageable) {
         permissionRepository.findAll(pageable)
+    }
+
+    @Override
+    @Transactional
+    Role saveRole(Role role) {
+        return roleRepository.save(role)
     }
 
     @Override
