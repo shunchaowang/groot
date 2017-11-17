@@ -2,9 +2,6 @@
 spring:
   profiles:
     active: default
-  data:
-    rest:
-      base-path: /api
 
 logging:
   level:
@@ -16,7 +13,7 @@ spring:
   profiles: dev
   datasource:
     platform: mysql
-    url: jdbc:mysql://localhost:3306/smartstart?useSSL=false
+    url: jdbc:mysql://localhost:3306/groot?useSSL=false
     username: root
     password:
     driver-class-name: com.mysql.jdbc.Driver
