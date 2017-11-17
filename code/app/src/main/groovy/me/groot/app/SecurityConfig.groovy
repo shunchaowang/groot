@@ -77,7 +77,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/resources/**", '/webjars/**', '/js/**', '/css/**', '/images/**', '/vendors/**')
+                .antMatchers("/resources/**", '/js/**', '/css/**', '/images/**',
+                '/vendors/**')
         // allow webjars and static go through
     }
 
