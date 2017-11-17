@@ -1,4 +1,4 @@
-rootProject.name = 'smartstart'
+rootProject.name = 'groot'
 
 include 'core'
 include 'app'
