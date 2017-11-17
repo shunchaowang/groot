@@ -1,5 +1,5 @@
-# smartstart
-Smart Start with Spring Boot and Groovy
+# Groot
+> *GR* oovy with Spring B *OOT* 
 # Introduction
 > An awesome project based on Spring Boot, Spring Security and Thymeleaf. Groovy is used as the language on this
 project, it sounds so exciting to use Groovy on Spring Framework project, can abandon Grails now.
