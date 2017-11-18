@@ -6,8 +6,8 @@ spring:
 logging:
   level:
     ROOT: ERROR
-    me.smartstart.app: DEBUG
-    me.smartstart.core: DEBUG
+    me.groot.app: DEBUG
+    me.groot.core: DEBUG
 ---
 spring:
   profiles: dev
@@ -32,8 +32,8 @@ server:
 logging:
   level:
     ROOT: ERROR
-    me.smartstart.app: DEBUG
-    me.smartstart.core: DEBUG
+    me.groot.app: DEBUG
+    me.groot.core: DEBUG
     org.springframework: DEBUG
     org.springframework.data: TRACE
     org.springframework.data.domain: TRACE
@@ -46,5 +46,5 @@ spring:
 logging:
   level:
     ROOT: ERROR
-    me.smartstart.app: DEBUG
-    me.smartstart.core: DEBUG
+    me.groot.app: DEBUG
+    me.groot.core: DEBUG

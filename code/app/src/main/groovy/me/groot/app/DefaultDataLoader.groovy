@@ -67,6 +67,9 @@ class DefaultDataLoader implements CommandLineRunner {
                 lastName: 'Admin', dateCreated: new Date(), roles: new HashSet<Role>(Arrays.asList(adminRole)),
                 active: true)
         userService.saveUser(adminUser)
+        logger.debug("admin user version: ${adminUser.id}")
+        adminUser = userService.saveUser(adminUser)
+        logger.debug("admin user version: ${adminUser.version}")
 
         // create user user
         User userUser = new User(username: 'user', password: passwordEncoder.encode('user'), firstName: 'User',

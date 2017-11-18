@@ -38,6 +38,9 @@ class User {
     @Column(nullable = false)
     boolean active
 
+    @Version
+    long version
+
     // JoinTable makes User is the owner of the relationship to Role
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = 'user_role_mapping',
