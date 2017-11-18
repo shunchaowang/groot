@@ -18,6 +18,9 @@ class MenuItem {
     @Column(nullable = false)
     int index
 
+    @Version
+    long version
+
     // unidirectional relation to MenuCategory
     @ManyToOne
     @JoinColumn(name = 'menu_category_id')

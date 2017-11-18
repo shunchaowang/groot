@@ -15,6 +15,9 @@ class MenuCategory {
     @Column(nullable = false)
     int index
 
+    @Version
+    long version
+
     @OneToMany(mappedBy = 'menuCategory')
     Set<MenuItem> menuItems
 }

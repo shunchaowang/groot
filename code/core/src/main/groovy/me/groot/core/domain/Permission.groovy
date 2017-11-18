@@ -18,6 +18,9 @@ class Permission {
     @Column(nullable = false)
     boolean active
 
+    @Version
+    long version
+
     // unidirectional relation to MenuItem
     @OneToOne
     @JoinColumn(name = 'menu_item_id')
