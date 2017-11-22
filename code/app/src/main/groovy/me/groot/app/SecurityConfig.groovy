@@ -79,7 +79,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoring()
                 .antMatchers("/resources/**", '/js/**', '/css/**', '/images/**',
                 '/vendors/**')
-        // allow webjars and static go through
+        // allow static go through
     }
 
 /**

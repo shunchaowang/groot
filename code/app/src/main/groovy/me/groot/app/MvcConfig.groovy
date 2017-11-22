@@ -26,7 +26,8 @@ class MvcConfig extends WebMvcConfigurerAdapter {
     LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver()
 //        localeResolver.defaultLocale = new Locale("zh", "cn") // the same with Locale.CHINA
-        localeResolver.defaultLocale = Locale.CHINA
+//        localeResolver.defaultLocale = Locale.CHINA //zh_CN
+        localeResolver.defaultLocale = Locale.ENGLISH // en
         return localeResolver
     }
 
@@ -34,8 +35,7 @@ class MvcConfig extends WebMvcConfigurerAdapter {
      * add a lang interceptor to change the locale
      * @return LocaleChangeInterceptor
      */
-    @Bean
-    LocaleChangeInterceptor localeChangeInterceptor() {
+    private LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor()
         interceptor.paramName = 'lang'
         return interceptor

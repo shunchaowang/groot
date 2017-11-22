@@ -60,6 +60,7 @@ class UserDetailsImpl implements UserDetails {
         }
 
         menus = new ArrayList<>(menuMap.values())
+        Collections.sort(menus)
         menus.each {
             Collections.sort(it.subMenus)
         }
