@@ -8,6 +8,7 @@ import me.groot.core.service.UserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -33,6 +34,7 @@ class RestUserController {
     @Autowired
     BCryptPasswordEncoder passwordEncoder
 
+    @PreAuthorize("hasPermission('', 'manageUser')")
     @PutMapping('/update')
     RestResponse update(@Valid @RequestBody UserCommand userCommand, BindingResult bindingResult) {
 
@@ -46,6 +48,7 @@ class RestUserController {
     }
 
 
+    @PreAuthorize("hasPermission('', 'manageUser')")
     @PostMapping('/create')
     RestResponse create(@Valid @RequestBody UserCommand userCommand, BindingResult bindingResult) {
 
@@ -57,6 +60,7 @@ class RestUserController {
         new RestResponse(status: 'success', data: new UserCommand(user))
     }
 
+    @PreAuthorize("hasPermission('', 'manageUser')")
     @DeleteMapping('/delete/{id}')
     RestResponse delete(@PathVariable long id) {
         User user = userService.getUser(id)

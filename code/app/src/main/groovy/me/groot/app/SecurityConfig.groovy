@@ -76,6 +76,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
         web
                 .ignoring()
                 .antMatchers('/js/**', '/css/**', '/images/**', '/vendors/**')
+        logger.debug("Web ignoring initialized.")
         // allow static go through
     }
 
