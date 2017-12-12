@@ -14,13 +14,13 @@ apply plugin: 'groovy'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'idea'
 
-idea {
-    module {
-        inheritOutputDirs = false
-        outputDir = file("$buildDir/classes/main/")
-        testOutputDir = file("$buildDir/classes/test/")
-    }
-}
+//idea {
+//    module {
+//        inheritOutputDirs = false
+//        outputDir = file("$buildDir/classes/main/")
+//        testOutputDir = file("$buildDir/classes/test/")
+//    }
+//}
 
 group = '${project.name}'
 version = '0.0.1-SNAPSHOT'
